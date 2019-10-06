@@ -1,0 +1,5 @@
+node_modules/
+dist/
+service-account.json
+.env
+generated/
