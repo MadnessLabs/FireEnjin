@@ -1,0 +1,48 @@
+import { Collection } from "fireorm";
+import {
+  Field,
+  ID,
+  ObjectType,
+  Resolver,
+  Root,
+  FieldResolver,
+  InputType
+} from "type-graphql";
+
+import Model from "./Model";
+
+@Collection("{{plural name}}")
+@ObjectType({
+  description: "The information for a {{pascalCase name}} document"
+})
+export class {{pascalCase name}} {
+  @Field(() => ID)
+  id: string;
+  @Field({
+    description: "The name of the {{pascalCase name}}"
+  })
+  name?: string;
+}
+
+@InputType({ description: "Editable {{pascalCase name}} data" })
+export class {{pascalCase name}}Input implements Partial<{{pascalCase name}}> {
+  @Field()
+  name: string;
+}
+
+export class {{pascalCase name}}Model extends Model {
+  constructor() {
+    super({
+      docSchema: {{pascalCase name}},
+      inputType: {{pascalCase name}}Input
+    });
+  }
+}
+
+@Resolver(of => {{pascalCase name}})
+export class {{pascalCase name}}Resolver extends new {{pascalCase name}}Model().Resolver {
+//   @FieldResolver()
+//   user(@Root() data: {{pascalCase name}}): Promise<User> {
+//     return new UserModel().find(data.user.id);
+//   }
+}

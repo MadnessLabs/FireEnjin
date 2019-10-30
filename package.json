@@ -6,7 +6,7 @@
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "npm run clean && npm run build:types && npm run build:rollup && node tasks/prependIndex.js",
+    "build": "npm run clean && npm run build:types && npm run build:rollup",
     "build:rollup": "rollup -c",
     "build:types": "tsc --emitDeclarationOnly",
     "clean": "rimraf dist/",
@@ -23,11 +23,14 @@
   },
   "dependencies": {
     "firebase-admin": "^8.6.0",
-    "glob": "^7.1.4"
+    "glob": "^7.1.4",
+    "globby": "^10.0.1",
+    "pluralize": "^8.0.0",
+    "prettier": "^1.18.2",
+    "yargs": "^14.2.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
-    "fs-extra": "^8.1.0",
     "jest": "^24.9.0",
     "rimraf": "^3.0.0",
     "rollup": "^1.23.1",

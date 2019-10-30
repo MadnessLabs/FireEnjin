@@ -1,0 +1,10 @@
+import admin from "firebase-admin";
+
+export default async (db: admin.firestore.Firestore, dryRun = false) => ({
+  up: async () => {
+    return {};
+  },
+  down: async () => {
+    return {};
+  }
+});
