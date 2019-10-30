@@ -4,43 +4,39 @@
   "description": "A set of tools for speeding up production of full-stack Firebase projects.",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "npm run build:types && rollup -c",
+    "build": "npm run clean && npm run build:types && npm run build:rollup && node tasks/prependIndex.js",
+    "build:rollup": "rollup -c",
     "build:types": "tsc --emitDeclarationOnly",
-    "prepare": "npm run build",
-    "prepublish": "npm run build",
+    "clean": "rimraf dist/",
+    "lint": "tslint --project tsconfig.json",
+    "prepublish": "npm run clean && npm run lint && npm run build",
     "semantic-release": "semantic-release",
-    "test": "jest --no-cache"
+    "serve": "rollup -c -w",
+    "start": "npm run serve",
+    "test": "jest --no-cache",
+    "test:watch": "jest --watch --no-cache"
+  },
+  "bin": {
+    "fireenjin": "dist/index.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^8.6.0",
+    "glob": "^7.1.4"
   },
   "devDependencies": {
-    "apollo-server": "^2.9.4",
-    "firebase-admin": "^8.6.0",
-    "fireorm": "^0.9.0",
+    "@types/jest": "^24.0.18",
     "fs-extra": "^8.1.0",
-    "glob": "^7.1.4",
-    "graphql": "^14.5.8",
-    "graphql-tag": "^2.10.1",
-    "reflect-metadata": "^0.1.13",
-    "type-graphql": "^0.17.5",
+    "jest": "^24.9.0",
+    "rimraf": "^3.0.0",
     "rollup": "^1.23.1",
     "rollup-plugin-typescript": "^1.0.1",
-    "tslib": "^1.10.0",
-    "@graphql-codegen/cli": "^1.7.0",
-    "@graphql-codegen/fragment-matcher": "1.7.0",
-    "@graphql-codegen/introspection": "1.7.0",
-    "@graphql-codegen/typescript": "1.7.0",
-    "@graphql-codegen/typescript-document-nodes": "1.7.0",
-    "@graphql-codegen/typescript-graphql-files-modules": "1.7.0",
-    "@graphql-codegen/typescript-operations": "1.7.0",
-    "@graphql-codegen/typescript-stencil-apollo": "1.7.0",
-    "@graphql-codegen/typescript-type-graphql": "^1.7.0",
-    "@types/jest": "^24.0.18",
-    "jest": "^24.9.0",
     "semantic-release": "^15.13.24",
     "ts-jest": "^24.1.0",
-    "ts-node-dev": "^1.0.0-pre.43",
+    "tslib": "^1.10.0",
     "tslint": "^5.20.0",
-    "typescript": "^3.6.3"
+    "typescript": "^3.6.4"
   },
   "repository": {
     "type": "git",
@@ -54,10 +50,7 @@
     "popcorn245",
     "youtube",
     "javascript",
-    "typescript",
-    "stenciljs",
-    "fireorm",
-    "graphql"
+    "typescript"
   ],
   "author": "Madness Labs",
   "license": "MIT",
