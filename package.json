@@ -1,5 +1,5 @@
 {
-  "name": "@enjin/fireenjin",
+  "name": "@madnesslabs/fireenjin",
   "version": "1.0.2",
   "description": "A set of tools for speeding up production of full-stack Firebase projects.",
   "main": "dist/index.js",
