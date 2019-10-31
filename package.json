@@ -1,6 +1,6 @@
 {
   "name": "@enjin/fireenjin",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A set of tools for speeding up production of full-stack Firebase projects.",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -32,6 +32,7 @@
     "fireenjin": "dist/index.js"
   },
   "dependencies": {
+    "@semantic-release/npm": "^5.3.2",
     "firebase-admin": "^8.6.0",
     "glob": "^7.1.4",
     "globby": "^10.0.1",
