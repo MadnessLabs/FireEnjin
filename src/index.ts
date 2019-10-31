@@ -10,17 +10,17 @@ const enjinDir = __dirname;
 
 if (process.argv.length > 2) {
   if (process.argv[2] === "triggers") {
-    triggersCommand();
+    triggersCommand().catch(err => console.log(err));
   } else if (process.argv[2] === "generate") {
-    generateCommand();
+    generateCommand().catch(err => console.log(err));
   } else if (process.argv[2] === "seed:clone") {
-    cloneSeedCommand();
+    cloneSeedCommand().catch(err => console.log(err));
   } else if (process.argv[2] === "seed") {
-    runSeedCommand();
+    runSeedCommand().catch(err => console.log(err));
   } else if (process.argv[2] === "env") {
-    envCommand();
+    envCommand().catch(err => console.log(err));
   } else if (process.argv[2] === "migrate") {
-    migrateCommand();
+    migrateCommand().catch(err => console.log(err));
   } else {
     console.log(`${process.argv[2]} command doesn't exist!`);
   }
