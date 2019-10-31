@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import * as fs from "fs";
 import triggersCommand from "./commands/triggers";
 import cloneSeedCommand from "./commands/cloneSeed";
@@ -5,8 +7,6 @@ import envCommand from "./commands/env";
 import generateCommand from "./commands/generate";
 import migrateCommand from "./commands/migrate";
 import runSeedCommand from "./commands/runSeed";
-
-const enjinDir = __dirname;
 
 if (process.argv.length > 2) {
   if (process.argv[2] === "triggers") {
@@ -25,6 +25,6 @@ if (process.argv.length > 2) {
     console.log(`${process.argv[2]} command doesn't exist!`);
   }
 } else {
-  const docs = fs.readFileSync(enjinDir + "/README.md", "utf8");
+  const docs = fs.readFileSync(`${__dirname}/../README.md`, "utf8");
   console.log(docs);
 }

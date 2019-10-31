@@ -6,9 +6,7 @@
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "npm run clean && npm run build:types && npm run build:rollup",
-    "build:rollup": "rollup -c",
-    "build:types": "tsc --emitDeclarationOnly",
+    "build": "npm run clean && tsc",
     "clean": "rimraf dist/",
     "g:input": "npm run plop input",
     "g:middleware": "npm run plop middleware",
@@ -21,9 +19,10 @@
     "g:unit": "npm run plop unit",
     "lint": "tslint --project tsconfig.json",
     "plop": "plop",
-    "publish": "npm run build:types && npm run build:rollup",
+    "publish": "npm run build",
+    "refresh": "rimraf ./node_modules ./package-lock.json && npm install",
     "semantic-release": "semantic-release",
-    "serve": "rollup -c -w",
+    "serve": "tsc -w",
     "start": "npm run serve",
     "test": "jest --no-cache",
     "test:watch": "jest --watch --no-cache"
@@ -32,7 +31,6 @@
     "fireenjin": "dist/index.js"
   },
   "dependencies": {
-    "@semantic-release/npm": "^5.3.2",
     "firebase-admin": "^8.6.0",
     "glob": "^7.1.4",
     "globby": "^10.0.1",
@@ -44,14 +42,15 @@
   "devDependencies": {
     "@semantic-release/commit-analyzer": "^6.3.2",
     "@semantic-release/git": "^7.0.17",
+    "@semantic-release/npm": "^5.3.2",
     "@semantic-release/release-notes-generator": "^7.3.2",
     "@types/jest": "^24.0.18",
+    "@types/node": "^12.12.3",
     "jest": "^24.9.0",
     "rimraf": "^3.0.0",
-    "rollup": "^1.23.1",
-    "rollup-plugin-typescript": "^1.0.1",
     "semantic-release": "^15.13.24",
     "ts-jest": "^24.1.0",
+    "ts-node": "^8.4.1",
     "tslib": "^1.10.0",
     "tslint": "^5.20.0",
     "typescript": "^3.6.4"
