@@ -1,6 +1,6 @@
 {
   "name": "@enjin/fireenjin",
-  "version": "0.0.0-development",
+  "version": "0.0.1",
   "description": "A set of tools for speeding up production of full-stack Firebase projects.",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -41,6 +41,9 @@
     "yargs": "^14.2.0"
   },
   "devDependencies": {
+    "@semantic-release/commit-analyzer": "^6.3.2",
+    "@semantic-release/git": "^7.0.17",
+    "@semantic-release/release-notes-generator": "^7.3.2",
     "@types/jest": "^24.0.18",
     "jest": "^24.9.0",
     "rimraf": "^3.0.0",
