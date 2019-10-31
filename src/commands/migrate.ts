@@ -18,7 +18,7 @@ function connectDatabase() {
 
 export default async () => {
   let migrationCount = 0;
-  const dryRun = process.argv[2] && process.argv[2] === "dry" ? true : false;
+  const dryRun = process.argv[3] && process.argv[3] === "dry" ? true : false;
 
   globby([`${process.cwd()}/dist/migrations/**/*.js`]).then(async files => {
     const db = connectDatabase();
