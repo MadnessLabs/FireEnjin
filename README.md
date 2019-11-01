@@ -11,7 +11,7 @@ Install fireenjin into your project and then you can run it with scripts in your
 npm install --save-dev @madnesslabs/fireenjin
 
 # Use commands like this in your package.json under scripts
-firenjin generate model
+fireenjin generate model
 ```
 
 # Commands
