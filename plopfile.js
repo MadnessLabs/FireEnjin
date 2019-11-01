@@ -31,7 +31,9 @@ function dateStringToYMDHIS(str) {
 }
 
 module.exports = function(plop) {
-  process.env.enjinProjectDir ? process.env.enjinProjectDir ? process.env.enjinProjectDir : process.cwd();
+  process.env.enjinProjectDir = process.env.enjinProjectDir
+    ? process.env.enjinProjectDir
+    : process.cwd();
   plop.setHelper("plural", txt => pluralize(txt));
   plop.setGenerator("input", {
     description: "define data structure of an input",
