@@ -1,6 +1,6 @@
 {
   "name": "@madnesslabs/fireenjin",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A set of tools for speeding up production of full-stack Firebase projects.",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
