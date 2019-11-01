@@ -8,7 +8,7 @@ async function renderIndex(
 ) {
   return new Promise(async (resolve, reject) => {
     fs.readFile(
-      "./templates/firebaseFunctionsIndex.hbs",
+      `${__dirname}/../../templates/firebaseFunctionsIndex.hbs`,
       "utf8",
       async (_err: any, data: any) => {
         try {

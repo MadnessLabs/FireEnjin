@@ -190,7 +190,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                 return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                         var _this = this;
                         return __generator(this, function (_a) {
-                            fs.readFile("./templates/seed.hbs", "utf8", function (err, data) { return __awaiter(_this, void 0, void 0, function () {
+                            fs.readFile(__dirname + "/../../templates/seed.hbs", "utf8", function (err, data) { return __awaiter(_this, void 0, void 0, function () {
                                 var err_1;
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {

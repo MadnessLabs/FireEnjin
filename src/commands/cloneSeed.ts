@@ -127,31 +127,35 @@ export default async () => {
 
   async function renderSeed(location, seedContent) {
     return new Promise(async (resolve, reject) => {
-      fs.readFile("./templates/seed.hbs", "utf8", async (err, data) => {
-        if (err) {
-          console.log(err);
-          reject(err);
-        }
+      fs.readFile(
+        `${__dirname}/../../templates/seed.hbs`,
+        "utf8",
+        async (err, data) => {
+          if (err) {
+            console.log(err);
+            reject(err);
+          }
 
-        try {
-          await writeData(
-            location,
-            prettier.format(
-              data
-                .replace(
-                  /{{modelName}}/g,
-                  collectionName.charAt(0).toUpperCase() +
-                    collectionName.substring(1, collectionName.length - 1)
-                )
-                .replace(/{{data}}/g, seedContent)
-            )
-          );
-          seedsClonedCount++;
-          resolve();
-        } catch (err) {
-          reject(err);
+          try {
+            await writeData(
+              location,
+              prettier.format(
+                data
+                  .replace(
+                    /{{modelName}}/g,
+                    collectionName.charAt(0).toUpperCase() +
+                      collectionName.substring(1, collectionName.length - 1)
+                  )
+                  .replace(/{{data}}/g, seedContent)
+              )
+            );
+            seedsClonedCount++;
+            resolve();
+          } catch (err) {
+            reject(err);
+          }
         }
-      });
+      );
     });
   }
 

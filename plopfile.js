@@ -31,6 +31,7 @@ function dateStringToYMDHIS(str) {
 }
 
 module.exports = function(plop) {
+  process.env.enjinProjectDir ? process.env.enjinProjectDir ? process.env.enjinProjectDir : process.cwd();
   plop.setHelper("plural", txt => pluralize(txt));
   plop.setGenerator("input", {
     description: "define data structure of an input",
@@ -49,8 +50,8 @@ module.exports = function(plop) {
     actions: [
       {
         type: "add",
-        path: "src/inputs/{{camelCase name}}.ts",
-        templateFile: "templates/input.hbs"
+        path: `${process.env.enjinProjectDir}/src/inputs/{{camelCase name}}.ts`,
+        templateFile: `${__dirname}/templates/input.hbs`
       }
     ]
   });
@@ -67,8 +68,10 @@ module.exports = function(plop) {
     actions: [
       {
         type: "add",
-        path: `src/migrations/${dateStringToYMD()}_{{camelCase name}}.ts`,
-        templateFile: "templates/migration.hbs"
+        path: `${
+          process.env.enjinProjectDir
+        }/src/migrations/${dateStringToYMD()}_{{camelCase name}}.ts`,
+        templateFile: `${__dirname}/templates/migration.hbs`
       }
     ]
   });
@@ -84,8 +87,8 @@ module.exports = function(plop) {
     actions: [
       {
         type: "add",
-        path: "src/models/{{pascalCase name}}.ts",
-        templateFile: "templates/model.hbs"
+        path: `${process.env.enjinProjectDir}/src/models/{{pascalCase name}}.ts`,
+        templateFile: `${__dirname}/templates/model.hbs`
       }
     ]
   });
@@ -108,8 +111,8 @@ module.exports = function(plop) {
     actions: data => [
       {
         type: "add",
-        path: "src/queries/{{camelCase name}}.gql",
-        templateFile: `templates/query-${data.type}.hbs`
+        path: `${process.env.enjinProjectDir}/src/queries/{{camelCase name}}.gql`,
+        templateFile: `${__dirname}/templates/query-${data.type}.hbs`
       }
     ]
   });

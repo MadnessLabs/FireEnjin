@@ -36,17 +36,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var util = require("util");
-var exec = util.promisify(require("child_process").exec);
+var spawn = require("child_process").spawn;
+var path = require("path");
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, stdout, stderr;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0: return [4 /*yield*/, exec("exec < /dev/tty; npm run g:" + process.argv[3])];
-            case 1:
-                _a = _b.sent(), stdout = _a.stdout, stderr = _a.stderr;
-                console.log(stdout, stderr);
-                return [2 /*return*/];
-        }
+    return __generator(this, function (_a) {
+        process.env.enjinProjectDir = process.cwd();
+        spawn(/^win/.test(process.platform) ? "npm.cmd" : "npm", ["run", "plop", process.argv[3], "--prefix=" + __dirname + "/../../"], { stdio: "inherit", cwd: process.cwd() });
+        return [2 /*return*/];
     });
 }); });
