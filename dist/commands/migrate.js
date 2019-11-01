@@ -54,7 +54,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
     return __generator(this, function (_a) {
         migrationCount = 0;
         dryRun = process.argv[3] && process.argv[3] === "dry" ? true : false;
-        globby([process.cwd() + "/dist/migrations/**/*.js"]).then(function (files) { return __awaiter(void 0, void 0, void 0, function () {
+        globby(["./dist/migrations/**/*.js"], { cwd: process.cwd() }).then(function (files) { return __awaiter(void 0, void 0, void 0, function () {
             var db, _i, files_1, file, pathArr, currentMigration, migrationName, _a, docRef, migrationDoc, result, error_1, error_2;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -66,7 +66,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                         if (!(_i < files_1.length)) return [3 /*break*/, 15];
                         file = files_1[_i];
                         pathArr = file.split("/");
-                        currentMigration = require("../" + file).default(db, dryRun);
+                        currentMigration = require("" + file.replace("./", process.cwd() + "/")).default(db, dryRun);
                         migrationName = pathArr[pathArr.length - 1].split(".")[0];
                         if (!(typeof currentMigration.then === "function")) return [3 /*break*/, 3];
                         return [4 /*yield*/, currentMigration];
