@@ -24,6 +24,8 @@ if (process.argv.length > 2) {
     envCommand().catch(err => console.log(err));
   } else if (process.argv[2] === "migrate") {
     migrateCommand().catch(err => console.log(err));
+  } else if (process.argv[2] === "triggers") {
+    triggersCommand().catch(err => console.log(err));
   } else {
     console.log(`${process.argv[2]} command doesn't exist!`);
   }
