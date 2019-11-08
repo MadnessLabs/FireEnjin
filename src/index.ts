@@ -3,13 +3,16 @@
 import * as fs from "fs";
 import triggersCommand from "./commands/triggers";
 import cloneSeedCommand from "./commands/cloneSeed";
+import copyCommand from "./commands/copy";
 import envCommand from "./commands/env";
 import generateCommand from "./commands/generate";
 import migrateCommand from "./commands/migrate";
 import runSeedCommand from "./commands/runSeed";
 
 if (process.argv.length > 2) {
-  if (process.argv[2] === "triggers") {
+  if (process.argv[2] === "copy") {
+    copyCommand().catch(err => console.log(err));
+  } else if (process.argv[2] === "generate") {
     triggersCommand().catch(err => console.log(err));
   } else if (process.argv[2] === "generate") {
     generateCommand().catch(err => console.log(err));

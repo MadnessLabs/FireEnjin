@@ -16,9 +16,13 @@ fireenjin generate model
 
 # Commands
 
+**copy**
+
+This command copies a file from one place to another.
+
 **env**
 
-This command copies files from the env folder into the root
+This command copies files from the env folder into the root.
 
 **generate**
 
