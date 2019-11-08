@@ -22,28 +22,28 @@
   },
   "dependencies": {
     "firebase-admin": "^8.6.0",
-    "glob": "^7.1.4",
+    "glob": "^7.1.6",
     "globby": "^10.0.1",
-    "plop": "^2.5.2",
+    "plop": "^2.5.3",
     "pluralize": "^8.0.0",
     "prettier": "^1.18.2",
     "yargs": "^14.2.0"
   },
   "devDependencies": {
-    "@semantic-release/commit-analyzer": "^6.3.2",
-    "@semantic-release/git": "^7.0.17",
-    "@semantic-release/npm": "^5.3.2",
+    "@semantic-release/commit-analyzer": "^6.3.3",
+    "@semantic-release/git": "^7.0.18",
+    "@semantic-release/npm": "^5.3.4",
     "@semantic-release/release-notes-generator": "^7.3.2",
-    "@types/jest": "^24.0.18",
-    "@types/node": "^12.12.3",
+    "@types/jest": "^24.0.22",
+    "@types/node": "^12.12.6",
     "jest": "^24.9.0",
     "rimraf": "^3.0.0",
-    "semantic-release": "^15.13.24",
+    "semantic-release": "^15.13.30",
     "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
     "tslib": "^1.10.0",
-    "tslint": "^5.20.0",
-    "typescript": "^3.6.4"
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.2"
   },
   "repository": {
     "type": "git",
