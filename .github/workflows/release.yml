@@ -20,7 +20,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release
+        run: npx semantic-release -d
   release-github:
     name: Release Github Package Registry
     runs-on: ubuntu-18.04
@@ -38,4 +38,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish
+        run: npx semantic-release -d -p "@semantic-release/commit-analyzer,@semantic-release/release-notes-generator",@semantic-release/npm"
