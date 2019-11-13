@@ -13,8 +13,6 @@ if (process.argv.length > 2) {
   if (process.argv[2] === "copy") {
     copyCommand().catch(err => console.log(err));
   } else if (process.argv[2] === "generate") {
-    triggersCommand().catch(err => console.log(err));
-  } else if (process.argv[2] === "generate") {
     generateCommand().catch(err => console.log(err));
   } else if (process.argv[2] === "seed:clone") {
     cloneSeedCommand().catch(err => console.log(err));
