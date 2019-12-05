@@ -118,4 +118,31 @@ module.exports = function(plop) {
       }
     ]
   });
+  plop.setGenerator("unit", {
+    description: "A unit of functionality",
+    prompts: [
+      {
+        type: "input",
+        name: "name",
+        message: "The name of the new unit of functionality"
+      },
+      {
+        type: "input",
+        name: "description",
+        message: "The description of what the new unit of functionality does"
+      }
+    ],
+    actions: [
+      {
+        type: "add",
+        path: `${process.env.enjinProjectDir}/src/units/{{pascalCase name}}/{{pascalCase name}}.ts`,
+        templateFile: `${__dirname}/templates/unit.hbs`
+      },
+      {
+        type: "add",
+        path: `${process.env.enjinProjectDir}/src/units/{{pascalCase name}}/{{pascalCase name}}.test.ts`,
+        templateFile: `${__dirname}/templates/unit-test.hbs`
+      }
+    ]
+  });
 };

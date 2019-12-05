@@ -1,0 +1,13 @@
+import connect from "../../connect";
+connect();
+
+import {{camelCase name}} from "./{{camelCase name}}";
+
+describe("{{description}}", () => {
+  it("Should ", async done => {
+    const response = await {{camelCase name}}();
+    console.log(response);
+    expect(response).toMatchObject({});
+    done();
+  });
+});
