@@ -135,12 +135,12 @@ module.exports = function(plop) {
     actions: [
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/units/{{pascalCase name}}/{{pascalCase name}}.ts`,
+        path: `${process.env.enjinProjectDir}/src/units/{{camelCase name}}/{{camelCase name}}.ts`,
         templateFile: `${__dirname}/templates/unit.hbs`
       },
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/units/{{pascalCase name}}/{{pascalCase name}}.test.ts`,
+        path: `${process.env.enjinProjectDir}/src/units/{{camelCase name}}/{{camelCase name}}.test.ts`,
         templateFile: `${__dirname}/templates/unit-test.hbs`
       }
     ]
