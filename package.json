@@ -21,29 +21,29 @@
     "fireenjin": "dist/index.js"
   },
   "dependencies": {
-    "firebase-admin": "^8.6.0",
+    "firebase-admin": "^8.9.2",
     "glob": "^7.1.6",
-    "globby": "^10.0.1",
+    "globby": "^10.0.2",
     "plop": "^2.5.3",
     "pluralize": "^8.0.0",
-    "prettier": "^1.18.2",
-    "yargs": "^14.2.0"
+    "prettier": "^1.19.1",
+    "yargs": "^14.2.2"
   },
   "devDependencies": {
     "@semantic-release/commit-analyzer": "^6.3.3",
     "@semantic-release/git": "^7.0.18",
     "@semantic-release/npm": "^5.3.4",
-    "@semantic-release/release-notes-generator": "^7.3.2",
-    "@types/jest": "^24.0.22",
-    "@types/node": "^12.12.6",
+    "@semantic-release/release-notes-generator": "^7.3.5",
+    "@types/jest": "^24.9.1",
+    "@types/node": "^12.12.26",
     "jest": "^24.9.0",
-    "rimraf": "^3.0.0",
-    "semantic-release": "^15.13.30",
-    "ts-jest": "^24.1.0",
-    "ts-node": "^8.4.1",
+    "rimraf": "^3.0.1",
+    "semantic-release": "^15.14.0",
+    "ts-jest": "^24.3.0",
+    "ts-node": "^8.6.2",
     "tslib": "^1.10.0",
     "tslint": "^5.20.1",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.5"
   },
   "repository": {
     "type": "git",

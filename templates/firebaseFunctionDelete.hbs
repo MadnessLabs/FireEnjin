@@ -1,0 +1,25 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const functions = require("firebase-functions");
+const connect_1 = require("../connect");
+connect_1.default();
+const {{pascalCase modelName}}_1 = require("../models/{{pascalCase modelName}}");
+const cors = require("cors")({ origin: true });
+exports.default = functions.https.onRequest(async (req, res) => {
+    cors(req, res, async () => {
+        try {
+            if (!req.body || !req.body.id) {
+                throw new Error("ID is required to remove a document.");
+            }
+            return res.status(200).send({
+                {{camelCase modelName}}: await new {{pascalCase modelName}}_1.{{pascalCase modelName}}Model().delete(req.body.id)
+            });
+        }
+        catch (err) {
+            console.log("Error deleting {{camelCase modelName}}...", err);
+            return res.status(500).send({
+                message: err.message
+            });
+        }
+    });
+});
