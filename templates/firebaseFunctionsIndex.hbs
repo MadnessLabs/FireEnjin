@@ -1,9 +1,41 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-// const api_1 = require("./triggers/api");
+const functions = require('firebase-functions');
+const express = require('express');
+const cors = require('cors');
 {{imports}}
 
+function cleanObject(obj) {
+  const newObj = {};
+  for (const key of Object.keys(obj)) {
+    newObj[key] =
+      typeof obj[key] === "object" && !!obj[key]._firestore
+        ? { id: obj[key].id, path: obj[key].path }
+        : obj[key];
+  }
+
+  return newObj;
+}
+
+function cleanData(input) {
+  if (typeof input === "string") return input;
+
+  return typeof input === "object" && input.length
+    ? input.map(row => cleanObject(row))
+    : cleanObject(input);
+}
+
+const app = express();
+
+// Automatically allow cross-origin requests
+app.use(cors({ origin: true }));
+
+// Add middleware to authenticate requests
+// app.use(myMiddleware);
+
+// build multiple CRUD interfaces:
+{{endpoints}}
+
+// Expose Express API as a single Cloud Function:
 module.exports = {
-// api: api_1.default
+  api: functions.https.onRequest(app),
 {{exports}}
 };
