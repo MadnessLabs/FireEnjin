@@ -37,7 +37,7 @@ function replaceModelName (data, modelName) {
 export default async () => {
   let importStr = ``;
   let exportStr = ``;
-  const triggers: string[] = [];
+  const triggers = new Set();
   const schema = require(`${process.cwd()}/dist/graphql.schema.json`);
   let triggerCount = 0;
   for(const gqlType of schema.__schema.types) {
@@ -99,17 +99,18 @@ export default async () => {
           console.log(`Error creating ${field.name} trigger...`, e);
         }
       }
-      triggers.push(field.name)
+      triggers.add(field.name)
     });
   }
   for(const file of await globby(`./src/triggers/**/*.ts`)) {
     const pathParts = file.split("/");
-    triggers.push(pathParts[pathParts.length - 1].split(".")[0]);
+    triggers.add(pathParts[pathParts.length - 1].split(".")[0]);
   }
-  for(const trigger of triggers) {
+  triggers.forEach(trigger => {
     importStr += `const ${trigger}_1 = require("./triggers/${trigger}");`;
     exportStr += `${trigger}: ${trigger}_1.default,`;
-  }
+  });
+
   try {
     await renderToFile("firebaseFunctionsIndex", "./dist/index.js", (data) => data
     .replace(/{{imports}}/g, importStr)
@@ -119,6 +120,6 @@ export default async () => {
   }
 
   console.log(
-    `Rendered Firebase Functions index file with ${triggers.length + triggerCount} triggers...`
+    `Rendered Firebase Functions index file with ${triggers.size + triggerCount} triggers...`
   );
 };
