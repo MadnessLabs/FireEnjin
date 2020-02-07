@@ -37,12 +37,17 @@ function replaceModelName (data, modelName) {
 export default async () => {
   let importStr = ``;
   let exportStr = ``;
-  const triggers = new Set();
+  const triggers: string[] = [];
   const schema = require(`${process.cwd()}/dist/graphql.schema.json`);
   let triggerCount = 0;
+  for(const file of await globby(`./src/triggers/**/*.ts`)) {
+    const pathParts = file.split("/");
+    triggers.push(pathParts[pathParts.length - 1].split(".")[0]);
+  }
   for(const gqlType of schema.__schema.types) {
     if (["Query", "Mutation"].indexOf(gqlType.name) === -1) continue; 
-    gqlType.fields.map(async field => {
+    for (const field of gqlType.fields) {
+      if (triggers.indexOf(field.name) >= 0) continue;
       if (gqlType.name === 'Query' && field.type.kind === "OBJECT") {
         try {
           await renderToFile(
@@ -92,25 +97,21 @@ export default async () => {
           await renderToFile(
             "firebaseFunctionDelete", 
             `./dist/triggers/${field.name}.js`, 
-            (data) => replaceModelName(data, pluralize.singular(field.name.slice(5)))
+            (data) => replaceModelName(data, pluralize.singular(field.name.slice(6)))
           );
         } catch (e) {
           triggerCount--;
           console.log(`Error creating ${field.name} trigger...`, e);
         }
       }
-      triggers.add(field.name)
-    });
+      triggers.push(field.name)
+    }
   }
-  for(const file of await globby(`./src/triggers/**/*.ts`)) {
-    const pathParts = file.split("/");
-    triggers.add(pathParts[pathParts.length - 1].split(".")[0]);
-  }
-  triggers.forEach(trigger => {
+  console.log(triggers);
+  for(const trigger of triggers) {
     importStr += `const ${trigger}_1 = require("./triggers/${trigger}");`;
     exportStr += `${trigger}: ${trigger}_1.default,`;
-  });
-
+  }
   try {
     await renderToFile("firebaseFunctionsIndex", "./dist/index.js", (data) => data
     .replace(/{{imports}}/g, importStr)
@@ -120,6 +121,6 @@ export default async () => {
   }
 
   console.log(
-    `Rendered Firebase Functions index file with ${triggers.size + triggerCount} triggers...`
+    `Rendered Firebase Functions index file with ${triggers.length + triggerCount} triggers...`
   );
 };
