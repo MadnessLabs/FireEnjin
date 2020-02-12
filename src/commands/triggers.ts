@@ -75,7 +75,20 @@ export default async () => {
           models[modelName] = true;
           endpointStr += `app.get("/${camelize(
             modelName
-          )}/:id", async (req, res) => res.send(cleanData(await new ${modelName}.${modelName}Model().find(req.params.id))));\n`;
+          )}/:id", async (req, res) => {
+  const model = new ${modelName}.${modelName}Model();
+  const doc =
+    model.onBeforeFind && typeof model.onBeforeFind === "function"
+      ? await model.onBeforeFind(req.params.id, hookOptions)
+      : await model.find(req.params.id);
+  return res.send(
+    await cleanData(
+      model.onAfterFind && typeof model.onAfterFind === "function"
+        ? await model.onAfterFind(doc, hookOptions)
+        : doc
+    , {with: req.query.with, include: req.query.include, exclude: req.query.exclude})
+  );
+});\n`;
         } catch (e) {
           endpointCount--;
           console.log(`Error creating ${field.name} trigger...`, e);
@@ -91,7 +104,20 @@ export default async () => {
           models[modelName] = true;
           endpointStr += `app.get("/${camelize(
             modelName
-          )}", async (req, res) => res.send(cleanData(await new ${modelName}.${modelName}Model().limit(req.params.limit ? req.params.limit : 15).find())));\n`;
+          )}",  async (req, res) => {
+  const model = new ${modelName}.${modelName}Model();
+  const docs =
+    model.onBeforeList && typeof model.onBeforeList === "function"
+      ? await model.onBeforeList(req.query, hookOptions)
+      : await model.limit(req.query.limit ? req.query.limit : 15).find();
+  return res.send(
+    await cleanData(
+      model.onAfterList && typeof model.onAfterList === "function"
+        ? await model.onAfterList(docs, hookOptions)
+        : docs
+    , {with: req.query.with, include: req.query.include, exclude: req.query.exclude})
+  );
+});\n`;
         } catch (e) {
           endpointCount--;
           console.log(`Error creating ${field.name} trigger...`, e);
@@ -108,7 +134,30 @@ export default async () => {
           models[modelName] = true;
           endpointStr += `app.post("/${camelize(
             modelName
-          )}", async (req, res) => res.send(cleanData(await new ${modelName}.${modelName}Model().create(req.body))));\n`;
+          )}", async (req, res) => {
+  const model = new ${modelName}.${modelName}Model();
+  const docData =
+    model.onBeforeAdd && typeof model.onBeforeAdd === "function"
+      ? await model.onBeforeAdd(req.body, hookOptions)
+      : model.onBeforeWrite && typeof model.onBeforeWrite === "function"
+      ? await model.onBeforeWrite(req.body, hookOptions)
+      : req.body;
+  if (docData === false) {
+    return false;
+  }
+
+  const newDoc = await model.create(docData);
+
+  return res.send(
+    await cleanData(
+      model.onAfterAdd && typeof model.onAfterAdd === "function"
+        ? await model.onAfterAdd(newDoc, hookOptions)
+        : model.onAfterWrite && typeof model.onAfterWrite === "function"
+        ? await model.onAfterWrite(newDoc, hookOptions)
+        : newDoc
+    , {with: req.body.with, include: req.body.include, exclude: req.body.exclude})
+  );
+});\n`;
         } catch (e) {
           endpointCount--;
           console.log(`Error creating ${field.name} trigger...`, e);
@@ -125,7 +174,30 @@ export default async () => {
           models[modelName] = true;
           endpointStr += `app.post("/${camelize(
             modelName
-          )}/:id", async (req, res) => res.send(cleanData(await new ${modelName}.${modelName}Model().create(req.body))));\n`;
+          )}/:id", async (req, res) => {
+  const model = new ${modelName}.${modelName}Model();
+  const docData =
+    model.onBeforeEdit && typeof model.onBeforeEdit === "function"
+      ? await model.onBeforeEdit({ id: req.params.id, ...req.body }, hookOptions)
+      : model.onBeforeWrite && typeof model.onBeforeWrite === "function"
+      ? await model.onBeforeWrite({ id: req.params.id, ...req.body }, hookOptions)
+      : data;
+  if (docData === false) {
+    return false;
+  }
+
+  const doc = await model.update({ id: req.params.id, ...req.body });
+  
+  return res.send(
+    await cleanData(
+      model.onAfterEdit && typeof model.onAfterEdit === "function"
+        ? await model.onAfterEdit(doc, hookOptions)
+        : model.onAfterWrite && typeof model.onAfterWrite === "function"
+        ? await model.onAfterWrite(doc, hookOptions)
+        : doc
+    , {with: req.body.with, include: req.body.include, exclude: req.body.exclude})
+  );
+});\n`;
         } catch (e) {
           endpointCount--;
           console.log(`Error creating ${field.name} trigger...`, e);
@@ -145,7 +217,28 @@ export default async () => {
           models[modelName] = true;
           endpointStr += `app.delete("/${camelize(
             modelName
-          )}/:id", async (req, res) => res.send(cleanData(await new ${modelName}.${modelName}Model().delete(req.params.id))));\n`;
+          )}/:id", async (req, res) => {
+  const model = new ${modelName}.${modelName}Model();
+  const modelBefore = await options.model.find(req.params.id);
+  if (model.onBeforeDelete && typeof model.onBeforeDelete === "function") {
+    const res = await model.onBeforeDelete({
+      id: req.params.id,
+      ...modelBefore
+    }, hookOptions);
+    if (res === false) {
+      return false;
+    }
+  }
+  await model.delete(req.params.id);
+
+  return res.send(
+    await cleanData(
+      model.onAfterDelete && typeof model.onAfterDelete === "function"
+        ? await model.onAfterDelete({ id: req.params.id, ...modelBefore }, hookOptions)
+        : { id: req.params.id, ...modelBefore }
+    , {with: req.query.with, include: req.query.include, exclude: req.query.exclude})
+  );
+});\n`;
         } catch (e) {
           endpointCount--;
           console.log(`Error creating ${field.name} trigger...`, e);

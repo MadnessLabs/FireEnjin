@@ -5,29 +5,57 @@ const connect = require('./connect');
 
 {{imports}}
 
-connect.default();
+const db = connect.default();
 
-function cleanObject(obj) {
+async function cleanObject(obj, options = {}) {
   const newObj = {};
+  const includes =
+    options && options.include ? options.include.split(",") : false;
+  const excludes =
+    options && options.exclude ? options.exclude.split(",") : false;
+  const relations = options && options.with ? options.with.split(",") : false;
   for (const key of Object.keys(obj)) {
-    newObj[key] =
-      typeof obj[key] === "object" && !!obj[key]._firestore
-        ? { id: obj[key].id, path: obj[key].path }
-        : obj[key];
+    try {
+      if (
+        relations &&
+        relations.includes(key) &&
+        typeof obj[key] === "object" &&
+        obj[key].path
+      ) {
+        const doc = await db.doc(obj[key].path).get();
+        newObj[key] = await cleanObject({ id: doc.id, ...doc.data() }, {});
+      } else if (includes && includes.includes(key)) {
+        newObj[key] =
+          obj[key] && typeof obj[key] === "object" && !!obj[key]._firestore
+            ? { id: obj[key].id, path: obj[key].path }
+            : obj[key];
+      } else if (excludes && excludes.includes(key)) {
+        continue;
+      } else {
+        newObj[key] =
+          obj[key] && typeof obj[key] === "object" && !!obj[key]._firestore
+            ? { id: obj[key].id, path: obj[key].path }
+            : obj[key];
+      }
+    } catch (e) {
+      console.log(`Error getting ${key}`, obj[key], e);
+    }
   }
 
   return newObj;
 }
 
-function cleanData(input) {
+async function cleanData(input, options = {}) {
   if (typeof input === "string") return input;
 
   return typeof input === "object" && input.length
-    ? input.map(row => cleanObject(row))
-    : cleanObject(input);
+    ? input.map(async row => await cleanObject(row, options))
+    : await cleanObject(input, options);
 }
 
 const app = express();
+
+const hookOptions = { type: "rest" };
 
 // Automatically allow cross-origin requests
 app.use(cors({ origin: true }));
