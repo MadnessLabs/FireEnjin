@@ -109,7 +109,7 @@ export default async () => {
   const docs =
     model.onBeforeList && typeof model.onBeforeList === "function"
       ? await model.onBeforeList(req.query, hookOptions)
-      : await model.limit(req.query.limit ? req.query.limit : 15).find();
+      : await model.paginate(req.query);
   return res.send(
     await cleanData(
       model.onAfterList && typeof model.onAfterList === "function"
