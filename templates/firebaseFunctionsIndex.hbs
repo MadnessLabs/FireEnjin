@@ -48,9 +48,17 @@ async function cleanObject(obj, options = {}) {
 async function cleanData(input, options = {}) {
   if (typeof input === "string") return input;
 
-  return typeof input === "object" && input.length
-    ? input.map(async row => await cleanObject(row, options))
-    : await cleanObject(input, options);
+  let output = [];
+
+  if (typeof input === "object" && input.length) {
+    for (const row of input) {
+      output.push(await cleanObject(row, options));
+    }
+  } else {
+    output = await cleanObject(input, options);
+  }
+
+  return output;
 }
 
 const app = express();
