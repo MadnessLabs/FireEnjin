@@ -23,6 +23,14 @@ async function renderToFile(
   });
 }
 
+const skipResolvers: string[] = [];
+
+fs.readdir(`${process.cwd()}/dist/resolvers/`, (err, files) => {
+  files.forEach(file => {
+    skipResolvers.push(file.split('.')[0].toLowerCase());
+  });
+});
+
 function capitalize(s) {
   if (typeof s !== "string") return "";
   return s.charAt(0).toUpperCase() + s.slice(1);
@@ -56,14 +64,14 @@ export default async () => {
     const triggerName = pathParts[pathParts.length - 1].split(".")[0];
     importStr += `const ${triggerName} = require("./triggers/${triggerName}");\n`;
     exportStr += `  ${triggerName}: ${triggerName}.default,\n`;
-    triggers.push(triggerName);
+    triggers.push(triggerName.toLowerCase());
   }
 
   // CREATE API ENDPOINTS FROM GRAPHQL SCHEMA
   for (const gqlType of schema.__schema.types) {
     if (["Query", "Mutation"].indexOf(gqlType.name) === -1) continue;
     for (const field of gqlType.fields) {
-      if (endpoints.indexOf(field.name) >= 0) continue;
+      if (endpoints.indexOf(field.name.toLowerCase) >= 0 || skipResolvers.indexOf(field.name.toLowerCase()) >= 0 || triggers.indexOf(field.name.toLowerCase()) >= 0) continue;
       if (gqlType.name === "Query" && field.type.kind === "OBJECT") {
         try {
           // await renderToFile(
@@ -244,7 +252,7 @@ export default async () => {
           console.log(`Error creating ${field.name} trigger...`, e);
         }
       }
-      endpoints.push(field.name);
+      endpoints.push(field.name.toLowerCase());
     }
   }
 
@@ -253,11 +261,13 @@ export default async () => {
   }
 
   try {
-    await renderToFile("firebaseFunctionsIndex", "./dist/index.js", data =>
-      data
-        .replace(/{{imports}}/g, importStr)
-        .replace(/{{exports}}/g, exportStr)
-        .replace(/{{endpoints}}/g, endpointStr)
+    await renderToFile("firebaseFunctionsIndex", "./dist/index.js", data => {
+      return data
+      .replace(/{{imports}}/g, importStr)
+      .replace(/{{exports}}/g, exportStr)
+      .replace(/{{endpoints}}/g, endpointStr);
+    }
+      
     );
   } catch (e) {
     console.log("Error rendering firebase functions index... ", e);

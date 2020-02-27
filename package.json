@@ -21,6 +21,7 @@
     "fireenjin": "dist/index.js"
   },
   "dependencies": {
+    "faker": "^4.1.0",
     "firebase-admin": "^8.6.0",
     "glob": "^7.1.6",
     "globby": "^10.0.1",
