@@ -23,14 +23,6 @@ async function renderToFile(
   });
 }
 
-const skipResolvers: string[] = [];
-
-fs.readdir(`${process.cwd()}/dist/resolvers/`, (err, files) => {
-  files.forEach(file => {
-    skipResolvers.push(file.split('.')[0].toLowerCase());
-  });
-});
-
 function capitalize(s) {
   if (typeof s !== "string") return "";
   return s.charAt(0).toUpperCase() + s.slice(1);
@@ -51,12 +43,24 @@ export default async () => {
   let importStr = ``;
   let exportStr = ``;
   let endpointStr = ``;
+  const skipResolvers: string[] = [];
   const triggers: string[] = [];
   const endpoints: string[] = [];
   const models: any = {};
   let endpointCount = 0;
   const schema = require(`${process.cwd()}/dist/graphql.schema.json`);
 
+  // CHECK FOR CUSTOM RESOLVERS
+  try { 
+    fs.readdir(`${process.cwd()}/dist/resolvers/`, (err, files) => {
+      files.forEach(file => {
+        skipResolvers.push(file.split('.')[0].toLowerCase());
+      });
+    });
+  } catch (err) {
+    console.log("error getting resolver...");
+  }
+  
   // CREATE IMPORT AND EXPORT STRINGS FOR TRIGGERS
   for (const file of await globby(`./src/triggers/**/*.ts`)) {
     // const triggerFile = fs.readFileSync(file, "utf8");
