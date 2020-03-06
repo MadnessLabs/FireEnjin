@@ -1,7 +1,6 @@
 const globby = require("globby");
 const fbAdmin = require("firebase-admin");
 const fs = require("fs");
-const env = require(`${process.cwd()}/environment.json`);
 
 export default async () => {
   const getDirectories = source =>
@@ -23,6 +22,8 @@ export default async () => {
 
     return fbAdmin.firestore();
   }
+
+  const env = require(`${process.cwd()}/environment.json`);
 
   let seedCount = 0;
   const seedGlob = (process.argv[3]
