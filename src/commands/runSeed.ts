@@ -27,8 +27,8 @@ export default async () => {
   let seedCount = 0;
   const seedGlob = (process.argv[3]
     ? process.argv[3]
-    : env?.enjin?.defaultSeeds
-    ? env.enjin.defaultSeeds
+    : env?.defaultSeeds
+    ? env.defaultSeeds
     : getDirectories(`${process.cwd()}/dist/seeds`).join(",")
   )
     .split(",")
@@ -38,8 +38,8 @@ export default async () => {
   const db = connectDatabase();
   if (env && env.name === "local") {
     db.settings({
-      host: env.firebase?.host ? env.firebase.host : "localhost:8080",
-      ssl: false
+      host: env.firestore?.host ? env.firestore.host : "localhost:8080",
+      ssl: !!env.firestore?.ssl
     });
   }
   for (const file of files) {
