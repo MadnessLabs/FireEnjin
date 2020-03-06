@@ -36,7 +36,7 @@ export default async () => {
 
   const files = await globby(seedGlob);
   const db = connectDatabase();
-  if (env && env.name === "local") {
+  if (env?.firestore?.emulate) {
     db.settings({
       host: env.firestore?.host ? env.firestore.host : "localhost:8080",
       ssl: !!env.firestore?.ssl
