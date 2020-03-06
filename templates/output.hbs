@@ -1,0 +1,6 @@
+import { Field, ObjectType } from "type-graphql";
+
+@ObjectType({ description: "{{description}}" })
+export default class {{pascalCase name}}Output {
+  @Field() id: string;
+}

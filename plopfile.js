@@ -62,6 +62,103 @@ module.exports = function(plop) {
       }
     ]
   });
+  plop.setGenerator("endpoint", {
+    description:
+      "A new unit (with input & output), resolver, query, and http trigger",
+    prompts: [
+      {
+        type: "input",
+        name: "name",
+        message: "The name of the new endpoint"
+      },
+      {
+        type: "input",
+        name: "description",
+        message: "A description of what this endpoint is used for"
+      }
+    ],
+    actions: [
+      {
+        type: "add",
+        path: `${process.env.enjinProjectDir}/src/units/{{camelCase name}}/{{camelCase name}}.input.ts`,
+        templateFile: `${__dirname}/templates/input.hbs`
+      },
+      {
+        type: "add",
+        path: `${process.env.enjinProjectDir}/src/units/{{camelCase name}}/{{camelCase name}}.output.ts`,
+        templateFile: `${__dirname}/templates/output.hbs`
+      },
+      {
+        type: "add",
+        path: `${process.env.enjinProjectDir}/src/units/{{camelCase name}}/{{camelCase name}}.test.ts`,
+        templateFile: `${__dirname}/templates/unit-test.hbs`
+      },
+      {
+        type: "add",
+        path: `${process.env.enjinProjectDir}/src/units/{{camelCase name}}/{{camelCase name}}.ts`,
+        templateFile: `${__dirname}/templates/unit.hbs`
+      },
+      {
+        type: "add",
+        path: `${process.env.enjinProjectDir}/src/resolvers/{{pascalCase name}}.ts`,
+        templateFile: `${__dirname}/templates/resolver.hbs`
+      },
+      {
+        type: "add",
+        path: `${process.env.enjinProjectDir}/src/triggers/{{camelCase name}}.ts`,
+        templateFile: `${__dirname}/templates/trigger-https.hbs`
+      },
+      {
+        type: "add",
+        path: `${process.env.enjinProjectDir}/src/queries/{{camelCase name}}.gql`,
+        templateFile: `${__dirname}/templates/query-write.hbs`
+      }
+    ]
+  });
+  plop.setGenerator("resolver", {
+    description: "A new resolver for GraphQL",
+    prompts: [
+      {
+        type: "input",
+        name: "name",
+        message: "The name of the new resolver"
+      },
+      {
+        type: "input",
+        name: "description",
+        message: "A description of what this resolver is used for"
+      }
+    ],
+    actions: [
+      {
+        type: "add",
+        path: `${process.env.enjinProjectDir}/src/resolvers/{{pascalCase name}}.ts`,
+        templateFile: `${__dirname}/templates/resolver.hbs`
+      }
+    ]
+  });
+  plop.setGenerator("trigger", {
+    description: "A new trigger for Firebase Functions",
+    prompts: [
+      {
+        type: "input",
+        name: "name",
+        message: "The name of the new trigger"
+      },
+      {
+        type: "input",
+        name: "description",
+        message: "A description of what this trigger is used for"
+      }
+    ],
+    actions: [
+      {
+        type: "add",
+        path: `${process.env.enjinProjectDir}/src/triggers/{{camelCase name}}.ts`,
+        templateFile: `${__dirname}/templates/trigger.hbs`
+      }
+    ]
+  });
   plop.setGenerator("migration", {
     description:
       "A task that will run once per environment and save the results",

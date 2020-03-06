@@ -1,7 +1,6 @@
 import { Field, InputType } from "type-graphql";
 
 @InputType({ description: "{{description}}" })
-export default class {{pascalCase name}} {
-  @Field()
-  id: string;
+export default class {{pascalCase name}}Input {
+  @Field() id: string;
 }

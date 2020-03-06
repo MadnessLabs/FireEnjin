@@ -1,8 +1,11 @@
+import {{pascalCase name}}Input from "./{{camelCase name}}.input";
+import {{pascalCase name}}Output from "./{{camelCase name}}.output";
+
 /**
  * {{description}}
  */
 export default async function {{camelCase name}}(
-  data: any
-): Promise<any> {
-  return {};
+  input: {{pascalCase name}}Input
+): Promise<{{pascalCase name}}Output> {
+  return input;
 }

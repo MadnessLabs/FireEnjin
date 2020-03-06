@@ -3,11 +3,11 @@ connect();
 
 import {{camelCase name}} from "./{{camelCase name}}";
 
-describe("{{description}}", () => {
-  it("Should ", async done => {
-    const response = await {{camelCase name}}({});
+describe("{{titleCase name}}", () => {
+  it("Should {{description}}", async done => {
+    const response = await {{camelCase name}}({ id: "test"});
     console.log(response);
-    expect(response).toMatchObject({});
+    expect(response).toMatchObject({ id: "test" });
     done();
   });
 });
