@@ -1,8 +1,15 @@
 const globby = require("globby");
 const fbAdmin = require("firebase-admin");
 const fs = require("fs");
+const env = require(`${process.cwd()}/environment.json`);
 
 export default async () => {
+  const getDirectories = source =>
+    fs
+      .readdirSync(source, { withFileTypes: true })
+      .filter(dirent => dirent.isDirectory())
+      .map(dirent => dirent.name);
+
   function connectDatabase() {
     const serviceAccountKey = JSON.parse(
       fs.readFileSync(`${process.cwd()}/service-account.json`, "utf8")
@@ -18,12 +25,23 @@ export default async () => {
   }
 
   let seedCount = 0;
-  const seedGlob = (process.argv[3] ? process.argv[3] : "users")
+  const seedGlob = (process.argv[3]
+    ? process.argv[3]
+    : env?.enjin?.defaultSeeds
+    ? env.enjin.defaultSeeds
+    : getDirectories(`${process.cwd()}/dist/seeds`).join(",")
+  )
     .split(",")
     .map(collection => `./dist/seeds/${collection}/**/*.js`);
 
   const files = await globby(seedGlob);
   const db = connectDatabase();
+  if (env && env.name === "local") {
+    db.settings({
+      host: env.firebase?.host ? env.firebase.host : "localhost:8080",
+      ssl: false
+    });
+  }
   for (const file of files) {
     const pathArr = file.split("/");
     let currentSeed = require(`${file.replace(
