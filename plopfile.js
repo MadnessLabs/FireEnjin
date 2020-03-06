@@ -1,4 +1,9 @@
 const pluralize = require("pluralize");
+const package = require(`${process.env.enjinProjectDir}/package.json`);
+const hasStorybook = Object.keys(package.devDependencies).includes(
+  "@storybook/html"
+);
+const enjinSettings = package.enjin ? package.enjin : {};
 
 function dateStringToYMD(str) {
   const d = str ? new Date(Date.parse(str)) : new Date();
@@ -76,6 +81,70 @@ module.exports = function(plop) {
         templateFile: `${__dirname}/templates/migration.hbs`
       }
     ]
+  });
+  const componentProps = [
+    {
+      type: "input",
+      name: "name",
+      message: "The name of the new component"
+    }
+  ];
+  const handlebarsData = {};
+  if (!enjinSettings.namespace) {
+    componentProps.push({
+      type: "input",
+      name: "namespace",
+      message: "The namespace of the component",
+      filter: data => {
+        return !data || data === ""
+          ? ""
+          : data.replace(" ", "-").toLowerCase() + "-";
+      }
+    });
+  } else {
+    handlebarsData.namespace =
+      handlebarsData.namespace === ""
+        ? ""
+        : enjinSettings.namespace.replace(" ", "-").toLowerCase() + "-";
+  }
+  const componentActions = [
+    {
+      type: "add",
+      path: `${process.env.enjinProjectDir}/src/components/{{dashCase name}}/{{dashCase name}}.tsx`,
+      templateFile: `${__dirname}/templates/component-tsx.hbs`,
+      data: handlebarsData
+    },
+    {
+      type: "add",
+      path: `${process.env.enjinProjectDir}/src/components/{{dashCase name}}/{{dashCase name}}.css`,
+      templateFile: `${__dirname}/templates/component-css.hbs`,
+      data: handlebarsData
+    },
+    {
+      type: "add",
+      path: `${process.env.enjinProjectDir}/src/components/{{dashCase name}}/{{dashCase name}}.e2e.ts`,
+      templateFile: `${__dirname}/templates/component-e2e.hbs`,
+      data: handlebarsData
+    },
+    {
+      type: "add",
+      path: `${process.env.enjinProjectDir}/src/components/{{dashCase name}}/{{dashCase name}}.spec.ts`,
+      templateFile: `${__dirname}/templates/component-spec.hbs`,
+      data: handlebarsData
+    }
+  ];
+  if (hasStorybook) {
+    componentActions.push({
+      type: "add",
+      path: `${process.env.enjinProjectDir}/src/components/{{dashCase name}}/{{dashCase name}}.stories.js`,
+      templateFile: `${__dirname}/templates/component-stories.hbs`,
+      data: handlebarsData
+    });
+  }
+  plop.setGenerator("component", {
+    description: "Create a new web component",
+    prompts: componentProps,
+    actions: componentActions
   });
   plop.setGenerator("model", {
     description: "Define data structure and relationships",

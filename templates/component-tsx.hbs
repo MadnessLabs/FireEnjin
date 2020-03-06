@@ -1,37 +1,18 @@
-import { Component, Prop, State, Watch, h } from "@stencil/core";
+import { Build, Component, Prop, h } from "@stencil/core";
 
 @Component({
-  tag: "trackmygiving-avatar",
-  styleUrl: "avatar.css"
+  tag: "{{namespace}}{{dashCase name}}",
+  styleUrl: "{{dashCase name}}.css"
 })
-export class Avatar {
-  @Prop() src: string;
-  @Prop() size: string;
-
-  @State() avatarStyles: any;
-
-  @Watch("src")
-  onSrcChange() {
-    this.avatarStyles = {
-      backgroundImage: `url('${
-        this.src ? this.src : "./assets/images/default-icon.png"
-      }')`,
-      height: this.size ? this.size : "50px",
-      width: this.size ? this.size : "50px"
-    };
-  }
+export class {{pascalCase name}} {
 
   componentDidLoad() {
-    this.avatarStyles = {
-      backgroundImage: `url('${
-        this.src ? this.src : "./assets/images/default-icon.png"
-      }')`,
-      height: this.size ? this.size : "50px",
-      width: this.size ? this.size : "50px"
-    };
+    if (Build.isBrowser) {
+      // Get Data
+    }
   }
 
   render() {
-    return <div class="avatar-image" style={this.avatarStyles} />;
+    return <div></div>;
   }
 }

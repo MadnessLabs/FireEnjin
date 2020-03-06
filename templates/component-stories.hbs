@@ -1,5 +1,5 @@
 import { storiesOf } from "@storybook/html";
-import { withKnobs, text } from "@storybook/addon-knobs";
+import { withKnobs } from "@storybook/addon-knobs";
 
 import readme from "./readme.md";
 
@@ -12,15 +12,12 @@ const storyOptions = {
   }
 };
 
-storiesOf("Avatar", module)
+storiesOf("{{titleCase name}}", module)
   .addDecorator(withKnobs)
-  .addParameters({ jest: ["avatar"] })
+  .addParameters({ jest: ["{{dashCase name}}"] })
   .add(
     "Default",
     () =>
-      `<trackmygiving-avatar src="${text(
-        "src",
-        "https://madnesslabs.net/img/logo.png"
-      )}" size="${text("size", "50px")}"></trackmygiving-avatar>`,
+      `<{{namespace}}{{dashCase name}}></{{namespace}}{{dashCase name}}>`,
     storyOptions
   );
