@@ -30,7 +30,7 @@ export class {{pascalCase name}}Input implements Partial<{{pascalCase name}}> {
   name: string;
 }
 
-export class {{pascalCase name}}Model extends Model {
+export class {{pascalCase name}}Model extends Model<{{pascalCase name}}> {
   constructor() {
     super({
       docSchema: {{pascalCase name}},
