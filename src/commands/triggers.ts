@@ -89,6 +89,20 @@ export default async () => {
             modelName
           )}/:id", async (req, res) => {
   const model = new ${modelName}.${modelName}Model();
+  if (
+    model.onAuth &&
+    typeof model.onAuth === "function" &&
+    !(await model.onAuth(
+      "find",
+      {
+        id: req.params.id,
+      },
+      hookOptions
+    ))
+  )
+    return res.status(400).send({
+      message: "Permission Denied!"
+    });
   const doc =
     model.onBeforeFind && typeof model.onBeforeFind === "function"
       ? await model.onBeforeFind(req.params.id, hookOptions)
@@ -118,6 +132,15 @@ export default async () => {
             modelName
           )}",  async (req, res) => {
   const model = new ${modelName}.${modelName}Model();
+  console.log(JSON.stringify(hookOptions));
+  if (
+    model.onAuth &&
+    typeof model.onAuth === "function" &&
+    !(await model.onAuth("list", req.query ? req.query : {}, hookOptions))
+  )
+    return res.status(400).send({
+      message: "Permission Denied!"
+    });
   const docs =
     model.onBeforeList && typeof model.onBeforeList === "function"
       ? await model.onBeforeList(req.query, hookOptions)
@@ -148,6 +171,14 @@ export default async () => {
             modelName
           )}", async (req, res) => {
   const model = new ${modelName}.${modelName}Model();
+  if (
+    model.onAuth &&
+    typeof model.onAuth === "function" &&
+    !(await model.onAuth("add", req.body, hookOptions))
+  )
+    return res.status(400).send({
+      message: "Permission Denied!"
+    });
   const docData =
     model.onBeforeAdd && typeof model.onBeforeAdd === "function"
       ? await model.onBeforeAdd(req.body, hookOptions)
@@ -155,7 +186,9 @@ export default async () => {
       ? await model.onBeforeWrite(req.body, hookOptions)
       : req.body;
   if (docData === false) {
-    return false;
+    return res.status(400).send({
+      message: "No data for doc!"
+    });
   }
 
   const newDoc = await model.create(docData);
@@ -188,6 +221,14 @@ export default async () => {
             modelName
           )}/:id", async (req, res) => {
   const model = new ${modelName}.${modelName}Model();
+  if (
+    model.onAuth &&
+    typeof model.onAuth === "function" &&
+    !(await model.onAuth("edit", { ...req.body, id: req.params.id }, hookOptions))
+  )
+    return res.status(400).send({
+      message: "Permission Denied!"
+    });
   const docData =
     model.onBeforeEdit && typeof model.onBeforeEdit === "function"
       ? await model.onBeforeEdit({ id: req.params.id, ...req.body }, hookOptions)
@@ -195,7 +236,9 @@ export default async () => {
       ? await model.onBeforeWrite({ id: req.params.id, ...req.body }, hookOptions)
       : data;
   if (docData === false) {
-    return false;
+    return res.status(400).send({
+      message: "No data for doc!"
+    });
   }
 
   const doc = await model.update({ id: req.params.id, ...req.body });
@@ -231,14 +274,24 @@ export default async () => {
             modelName
           )}/:id", async (req, res) => {
   const model = new ${modelName}.${modelName}Model();
-  const modelBefore = await options.model.find(req.params.id);
+  if (
+    model.onAuth &&
+    typeof model.onAuth === "function" &&
+    !(await model.onAuth("list", { id: req.params.id }, hookOptions))
+  )
+    return res.status(400).send({
+      message: "Permission Denied!"
+    });
+  const modelBefore = await model.find(req.params.id);
   if (model.onBeforeDelete && typeof model.onBeforeDelete === "function") {
     const res = await model.onBeforeDelete({
       id: req.params.id,
       ...modelBefore
     }, hookOptions);
     if (res === false) {
-      return false;
+      return res.status(400).send({
+        message: "No data for doc!"
+      });
     }
   }
   await model.delete(req.params.id);

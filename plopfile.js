@@ -39,28 +39,28 @@ module.exports = function(plop) {
   process.env.enjinProjectDir = process.env.enjinProjectDir
     ? process.env.enjinProjectDir
     : process.cwd();
-  plop.setHelper("plural", txt => pluralize(txt));
+  plop.setHelper("plural", (txt) => pluralize(txt));
   plop.setGenerator("input", {
     description: "define data structure of an input",
     prompts: [
       {
         type: "input",
         name: "name",
-        message: "The name of the new input"
+        message: "The name of the new input",
       },
       {
         type: "input",
         name: "description",
-        message: "A description of what this input is used for"
-      }
+        message: "A description of what this input is used for",
+      },
     ],
     actions: [
       {
         type: "add",
         path: `${process.env.enjinProjectDir}/src/inputs/{{camelCase name}}.ts`,
-        templateFile: `${__dirname}/templates/input.hbs`
-      }
-    ]
+        templateFile: `${__dirname}/templates/input.hbs`,
+      },
+    ],
   });
   plop.setGenerator("endpoint", {
     description:
@@ -69,51 +69,51 @@ module.exports = function(plop) {
       {
         type: "input",
         name: "name",
-        message: "The name of the new endpoint"
+        message: "The name of the new endpoint",
       },
       {
         type: "input",
         name: "description",
-        message: "A description of what this endpoint is used for"
-      }
+        message: "A description of what this endpoint is used for",
+      },
     ],
     actions: [
       {
         type: "add",
         path: `${process.env.enjinProjectDir}/src/units/{{camelCase name}}/{{camelCase name}}.input.ts`,
-        templateFile: `${__dirname}/templates/input.hbs`
+        templateFile: `${__dirname}/templates/input.hbs`,
       },
       {
         type: "add",
         path: `${process.env.enjinProjectDir}/src/units/{{camelCase name}}/{{camelCase name}}.output.ts`,
-        templateFile: `${__dirname}/templates/output.hbs`
+        templateFile: `${__dirname}/templates/output.hbs`,
       },
       {
         type: "add",
         path: `${process.env.enjinProjectDir}/src/units/{{camelCase name}}/{{camelCase name}}.test.ts`,
-        templateFile: `${__dirname}/templates/unit-test.hbs`
+        templateFile: `${__dirname}/templates/endpoint-unit-test.hbs`,
       },
       {
         type: "add",
         path: `${process.env.enjinProjectDir}/src/units/{{camelCase name}}/{{camelCase name}}.ts`,
-        templateFile: `${__dirname}/templates/unit.hbs`
+        templateFile: `${__dirname}/templates/endpoint-unit.hbs`,
       },
       {
         type: "add",
         path: `${process.env.enjinProjectDir}/src/resolvers/{{pascalCase name}}.ts`,
-        templateFile: `${__dirname}/templates/resolver.hbs`
+        templateFile: `${__dirname}/templates/resolver.hbs`,
       },
       {
         type: "add",
         path: `${process.env.enjinProjectDir}/src/triggers/{{camelCase name}}.ts`,
-        templateFile: `${__dirname}/templates/trigger-https.hbs`
+        templateFile: `${__dirname}/templates/trigger-https.hbs`,
       },
       {
         type: "add",
         path: `${process.env.enjinProjectDir}/src/queries/{{camelCase name}}.gql`,
-        templateFile: `${__dirname}/templates/query-write.hbs`
-      }
-    ]
+        templateFile: `${__dirname}/templates/query-write.hbs`,
+      },
+    ],
   });
   plop.setGenerator("resolver", {
     description: "A new resolver for GraphQL",
@@ -121,21 +121,21 @@ module.exports = function(plop) {
       {
         type: "input",
         name: "name",
-        message: "The name of the new resolver"
+        message: "The name of the new resolver",
       },
       {
         type: "input",
         name: "description",
-        message: "A description of what this resolver is used for"
-      }
+        message: "A description of what this resolver is used for",
+      },
     ],
     actions: [
       {
         type: "add",
         path: `${process.env.enjinProjectDir}/src/resolvers/{{pascalCase name}}.ts`,
-        templateFile: `${__dirname}/templates/resolver.hbs`
-      }
-    ]
+        templateFile: `${__dirname}/templates/resolver.hbs`,
+      },
+    ],
   });
   plop.setGenerator("trigger", {
     description: "A new trigger for Firebase Functions",
@@ -143,21 +143,21 @@ module.exports = function(plop) {
       {
         type: "input",
         name: "name",
-        message: "The name of the new trigger"
+        message: "The name of the new trigger",
       },
       {
         type: "input",
         name: "description",
-        message: "A description of what this trigger is used for"
-      }
+        message: "A description of what this trigger is used for",
+      },
     ],
     actions: [
       {
         type: "add",
         path: `${process.env.enjinProjectDir}/src/triggers/{{camelCase name}}.ts`,
-        templateFile: `${__dirname}/templates/trigger.hbs`
-      }
-    ]
+        templateFile: `${__dirname}/templates/trigger.hbs`,
+      },
+    ],
   });
   plop.setGenerator("migration", {
     description:
@@ -166,8 +166,8 @@ module.exports = function(plop) {
       {
         type: "input",
         name: "name",
-        message: "The name of the migration"
-      }
+        message: "The name of the migration",
+      },
     ],
     actions: [
       {
@@ -175,28 +175,30 @@ module.exports = function(plop) {
         path: `${
           process.env.enjinProjectDir
         }/src/migrations/${dateStringToYMD()}_{{camelCase name}}.ts`,
-        templateFile: `${__dirname}/templates/migration.hbs`
-      }
-    ]
+        templateFile: `${__dirname}/templates/migration.hbs`,
+      },
+    ],
   });
   const componentProps = [
     {
       type: "input",
       name: "name",
-      message: "The name of the new component"
-    }
+      message: "The name of the new component",
+    },
   ];
-  const handlebarsData = {};
+  const handlebarsData = {
+    simple: false,
+  };
   if (!enjinSettings.namespace) {
     componentProps.push({
       type: "input",
       name: "namespace",
       message: "The namespace of the component",
-      filter: data => {
+      filter: (data) => {
         return !data || data === ""
           ? ""
           : data.replace(" ", "-").toLowerCase() + "-";
-      }
+      },
     });
   } else {
     handlebarsData.namespace =
@@ -209,39 +211,39 @@ module.exports = function(plop) {
       type: "add",
       path: `${process.env.enjinProjectDir}/src/components/{{dashCase name}}/{{dashCase name}}.tsx`,
       templateFile: `${__dirname}/templates/component-tsx.hbs`,
-      data: handlebarsData
+      data: handlebarsData,
     },
     {
       type: "add",
       path: `${process.env.enjinProjectDir}/src/components/{{dashCase name}}/{{dashCase name}}.css`,
       templateFile: `${__dirname}/templates/component-css.hbs`,
-      data: handlebarsData
+      data: handlebarsData,
     },
     {
       type: "add",
       path: `${process.env.enjinProjectDir}/src/components/{{dashCase name}}/{{dashCase name}}.e2e.ts`,
       templateFile: `${__dirname}/templates/component-e2e.hbs`,
-      data: handlebarsData
+      data: handlebarsData,
     },
     {
       type: "add",
       path: `${process.env.enjinProjectDir}/src/components/{{dashCase name}}/{{dashCase name}}.spec.ts`,
       templateFile: `${__dirname}/templates/component-spec.hbs`,
-      data: handlebarsData
-    }
+      data: handlebarsData,
+    },
   ];
   if (hasStorybook) {
     componentActions.push({
       type: "add",
       path: `${process.env.enjinProjectDir}/src/components/{{dashCase name}}/{{dashCase name}}.stories.js`,
       templateFile: `${__dirname}/templates/component-stories.hbs`,
-      data: handlebarsData
+      data: handlebarsData,
     });
   }
   plop.setGenerator("component", {
     description: "Create a new web component",
     prompts: componentProps,
-    actions: componentActions
+    actions: componentActions,
   });
   plop.setGenerator("model", {
     description: "Define data structure and relationships",
@@ -249,16 +251,16 @@ module.exports = function(plop) {
       {
         type: "input",
         name: "name",
-        message: "The name of the new model"
-      }
+        message: "The name of the new model",
+      },
     ],
     actions: [
       {
         type: "add",
         path: `${process.env.enjinProjectDir}/src/models/{{pascalCase name}}.ts`,
-        templateFile: `${__dirname}/templates/model.hbs`
-      }
-    ]
+        templateFile: `${__dirname}/templates/model.hbs`,
+      },
+    ],
   });
   plop.setGenerator("query", {
     description: "A query to get or modify data used for codegen",
@@ -266,23 +268,23 @@ module.exports = function(plop) {
       {
         type: "input",
         name: "name",
-        message: "The name of the query"
+        message: "The name of the query",
       },
       {
         type: "input",
         name: "type",
         message: "The type of query",
         choices: ["read", "write"],
-        default: "read"
-      }
+        default: "read",
+      },
     ],
-    actions: data => [
+    actions: (data) => [
       {
         type: "add",
         path: `${process.env.enjinProjectDir}/src/queries/{{camelCase name}}.gql`,
-        templateFile: `${__dirname}/templates/query-${data.type}.hbs`
-      }
-    ]
+        templateFile: `${__dirname}/templates/query-${data.type}.hbs`,
+      },
+    ],
   });
   plop.setGenerator("unit", {
     description: "A unit of functionality",
@@ -290,25 +292,31 @@ module.exports = function(plop) {
       {
         type: "input",
         name: "name",
-        message: "The name of the new unit of functionality"
+        message: "The name of the new unit of functionality",
       },
       {
         type: "input",
         name: "description",
-        message: "The description of what the new unit of functionality does"
-      }
+        message: "The description of what the new unit of functionality does",
+      },
     ],
     actions: [
       {
         type: "add",
         path: `${process.env.enjinProjectDir}/src/units/{{camelCase name}}/{{camelCase name}}.ts`,
-        templateFile: `${__dirname}/templates/unit.hbs`
+        templateFile: `${__dirname}/templates/unit.hbs`,
+        data: {
+          simple: true,
+        },
       },
       {
         type: "add",
         path: `${process.env.enjinProjectDir}/src/units/{{camelCase name}}/{{camelCase name}}.test.ts`,
-        templateFile: `${__dirname}/templates/unit-test.hbs`
-      }
-    ]
+        templateFile: `${__dirname}/templates/unit-test.hbs`,
+        data: {
+          simple: true,
+        },
+      },
+    ],
   });
 };

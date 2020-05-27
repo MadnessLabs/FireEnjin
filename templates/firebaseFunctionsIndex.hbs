@@ -1,7 +1,9 @@
+const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 const express = require('express');
 const cors = require('cors');
 const connect = require('./connect');
+const session = require('./session');
 
 {{imports}}
 
@@ -9,10 +11,8 @@ const db = connect.default();
 
 async function cleanObject(obj, options = {}) {
   const newObj = {};
-  const includes =
-    options && options.include ? options.include.split(",") : false;
-  const excludes =
-    options && options.exclude ? options.exclude.split(",") : false;
+  const includes = options && options.include ? options.include.split(",") : false;
+  const excludes = options && options.exclude ? options.exclude.split(",") : false;
   const relations = options && options.with ? options.with.split(",") : false;
   for (const key of Object.keys(obj)) {
     try {
@@ -26,16 +26,16 @@ async function cleanObject(obj, options = {}) {
         newObj[key] = await cleanObject({ id: doc.id, ...doc.data() }, {});
       } else if (includes && includes.includes(key)) {
         newObj[key] =
-          obj[key] && typeof obj[key] === "object" && !!obj[key]._firestore
-            ? { id: obj[key].id, path: obj[key].path }
-            : obj[key];
+        obj[key] && typeof obj[key] === "object" && !!obj[key]._firestore
+        ? { id: obj[key].id, path: obj[key].path }
+        : obj[key];
       } else if (excludes && excludes.includes(key)) {
         continue;
       } else {
         newObj[key] =
-          obj[key] && typeof obj[key] === "object" && !!obj[key]._firestore
-            ? { id: obj[key].id, path: obj[key].path }
-            : obj[key];
+        obj[key] && typeof obj[key] === "object" && !!obj[key]._firestore
+        ? { id: obj[key].id, path: obj[key].path }
+        : obj[key];
       }
     } catch (e) {
       console.log(`Error getting ${key}`, obj[key], e);
@@ -63,13 +63,16 @@ async function cleanData(input, options = {}) {
 
 const app = express();
 
-const hookOptions = { type: "rest" };
+const hookOptions = { type: "rest", context: {} };
 
 // Automatically allow cross-origin requests
 app.use(cors({ origin: true }));
 
 // Add middleware to authenticate requests
-// app.use(myMiddleware);
+app.use(async function(req, res, next) {
+  hookOptions.context = await session.default({req: req, admin: admin, db: db});
+  next();
+});
 
 // build multiple CRUD interfaces:
 {{endpoints}}
