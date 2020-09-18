@@ -51,16 +51,16 @@ export default async () => {
   const schema = require(`${process.cwd()}/dist/graphql.schema.json`);
 
   // CHECK FOR CUSTOM RESOLVERS
-  try { 
+  try {
     fs.readdir(`${process.cwd()}/dist/resolvers/`, (err, files) => {
-      files.forEach(file => {
-        skipResolvers.push(file.split('.')[0].toLowerCase());
+      files.forEach((file) => {
+        skipResolvers.push(file.split(".")[0].toLowerCase());
       });
     });
   } catch (err) {
     console.log("error getting resolver...");
   }
-  
+
   // CREATE IMPORT AND EXPORT STRINGS FOR TRIGGERS
   for (const file of await globby(`./src/triggers/**/*.ts`)) {
     // const triggerFile = fs.readFileSync(file, "utf8");
@@ -75,7 +75,12 @@ export default async () => {
   for (const gqlType of schema.__schema.types) {
     if (["Query", "Mutation"].indexOf(gqlType.name) === -1) continue;
     for (const field of gqlType.fields) {
-      if (endpoints.indexOf(field.name.toLowerCase) >= 0 || skipResolvers.indexOf(field.name.toLowerCase()) >= 0 || triggers.indexOf(field.name.toLowerCase()) >= 0) continue;
+      if (
+        endpoints.indexOf(field.name.toLowerCase) >= 0 ||
+        skipResolvers.indexOf(field.name.toLowerCase()) >= 0 ||
+        triggers.indexOf(field.name.toLowerCase()) >= 0
+      )
+        continue;
       if (gqlType.name === "Query" && field.type.kind === "OBJECT") {
         try {
           // await renderToFile(
@@ -83,7 +88,7 @@ export default async () => {
           //   `./dist/triggers/${field.name}.js`,
           //   data => replaceModelName(data, field.name)
           // );
-          const modelName = capitalize(field.name);
+          const modelName = capitalize(pluralize.singular(field.name));
           models[modelName] = true;
           endpointStr += `app.get("/${camelize(
             modelName
@@ -318,14 +323,12 @@ export default async () => {
   }
 
   try {
-    await renderToFile("firebaseFunctionsIndex", "./dist/index.js", data => {
+    await renderToFile("firebaseFunctionsIndex", "./dist/index.js", (data) => {
       return data
-      .replace(/{{imports}}/g, importStr)
-      .replace(/{{exports}}/g, exportStr)
-      .replace(/{{endpoints}}/g, endpointStr);
-    }
-      
-    );
+        .replace(/{{imports}}/g, importStr)
+        .replace(/{{exports}}/g, exportStr)
+        .replace(/{{endpoints}}/g, endpointStr);
+    });
   } catch (e) {
     console.log("Error rendering firebase functions index... ", e);
   }

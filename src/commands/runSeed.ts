@@ -3,11 +3,12 @@ const fbAdmin = require("firebase-admin");
 const fs = require("fs");
 
 export default async () => {
-  const getDirectories = source =>
+  const env = require(`${process.cwd()}/environment.json`);
+  const getDirectories = (source) =>
     fs
       .readdirSync(source, { withFileTypes: true })
-      .filter(dirent => dirent.isDirectory())
-      .map(dirent => dirent.name);
+      .filter((dirent) => dirent.isDirectory())
+      .map((dirent) => dirent.name);
 
   function connectDatabase() {
     const serviceAccountKey = JSON.parse(
@@ -17,13 +18,20 @@ export default async () => {
     fbAdmin.initializeApp({
       credential: fbAdmin.credential.cert(serviceAccountKey),
       databaseURL: `https://${project}.firebaseio.com`,
-      storageBucket: `${project}.appspot.com`
+      storageBucket: `${project}.appspot.com`,
     });
 
-    return fbAdmin.firestore();
-  }
+    const firestore = fbAdmin.firestore();
 
-  const env = require(`${process.cwd()}/environment.json`);
+    if (env?.firestore?.emulate) {
+      firestore.settings({
+        host: env.firestore?.host ? env.firestore.host : "localhost:8080",
+        ssl: !!env.firestore?.ssl,
+      });
+    }
+
+    return firestore;
+  }
 
   let seedCount = 0;
   const seedGlob = (process.argv[3]
@@ -33,16 +41,10 @@ export default async () => {
     : getDirectories(`${process.cwd()}/dist/seeds`).join(",")
   )
     .split(",")
-    .map(collection => `./dist/seeds/${collection}/**/*.js`);
+    .map((collection) => `./dist/seeds/${collection}/**/*.js`);
 
   const files = await globby(seedGlob);
   const db = connectDatabase();
-  if (env?.firestore?.emulate) {
-    db.settings({
-      host: env.firestore?.host ? env.firestore.host : "localhost:8080",
-      ssl: !!env.firestore?.ssl
-    });
-  }
   for (const file of files) {
     const pathArr = file.split("/");
     let currentSeed = require(`${file.replace(
