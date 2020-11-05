@@ -2,6 +2,16 @@ import  Git from "nodegit";
 import inquirer from "inquirer";
 import path from "path";
 import rimraf from "rimraf";
+import { exec } from 'child_process';
+
+const runCommand = (command: string, options: any = null) => {
+  return new Promise((resolve, reject) => {
+    exec(command, options, (err, stdout) => {
+      if (err) reject(err);
+      resolve(stdout);
+    });
+  });
+};
 
 export default async () => {
   let defaultNamespace = true;
@@ -25,45 +35,75 @@ export default async () => {
           return true;
         }
       },
-        {
-          type: 'checkbox',
-          message: 'Select Project Needs',
-          name: 'repos',
-          choices: [
-            {
-              name: 'App',
-              checked: true
-            },
-            {
-              name: 'Backend',
-              checked: true
-            },
-            {
-              name: 'Components',
-              checked: true
-            },
-          ],
-          validate: function (answer) {
-            if (answer.length < 1) {
-              return 'You must choose at least one for your project.';
-            }
-    
-            return true;
+      {
+        type: 'input',
+        name: 'organization',
+        message: "What's your organization name?",
+      },
+      {
+        type: 'checkbox',
+        message: 'Select Project Needs',
+        name: 'repos',
+        choices: [
+          {
+            name: 'App',
+            checked: true
           },
+          {
+            name: 'Backend',
+            checked: true
+          },
+          {
+            name: 'Components',
+            checked: true
+          },
+        ],
+        validate: function (answer) {
+          if (answer.length < 1) {
+            return 'You must choose at least one for your project.';
+          }
+  
+          return true;
         },
-      ]);
+      },
+    ]);
+
     if (answers) {
       if (answers?.repos?.includes("App")) {
-        results.repos.push(await Git.Clone("https://github.com/madnesslabs/fireenjin-app.git", `${!defaultNamespace ? answers.namespace + "/" : ""}app`));
-        await rimraf.sync(`${!defaultNamespace ? answers.namespace + "/" : ""}app/.git`);
+        console.log("Cloning App Repo...");
+        const appDir = `${!defaultNamespace ? answers.namespace + "/" : ""}app`;
+        results.repos.push(await Git.Clone("https://github.com/madnesslabs/fireenjin-app.git", appDir));
+        await rimraf.sync(`${appDir}/.git`);
+        console.log("Installing App Dependencies...");
+        await runCommand(`npm install`, { cwd: appDir });
+        console.log("Setting Up App GIT and Making Initial Commit...");
+        await runCommand(`git init`, { cwd: appDir });
+        await runCommand(`git add .`, { cwd: appDir });
+        await runCommand(`git commit -m "Initial Commit"`, { cwd: appDir });
       }
       if (answers?.repos?.includes("Backend")) {
-        results.repos.push(await Git.Clone("https://github.com/madnesslabs/fireenjin-backend.git", `${!defaultNamespace ? answers.namespace + "/" : ""}backend`));
-        await rimraf.sync(`${!defaultNamespace ? answers.namespace + "/" : ""}backend/.git`);
+        console.log("Cloning Backend Repo...");
+        const backendDir = `${!defaultNamespace ? answers.namespace + "/" : ""}backend`;
+        results.repos.push(await Git.Clone("https://github.com/madnesslabs/fireenjin-backend.git", backendDir));
+        await rimraf.sync(`${backendDir}/.git`);
+        console.log("Installing Backend Dependencies...");
+        await runCommand(`npm install`, { cwd: backendDir });
+        console.log("Setting Up Backend GIT and Making Initial Commit...");
+        await runCommand(`git init`, { cwd: backendDir });
+        await runCommand(`git add .`, { cwd: backendDir });
+        await runCommand(`git commit -m "Initial Commit"`, { cwd: backendDir });
       }
       if (answers?.repos?.includes("Components")) {
-        results.repos.push(await Git.Clone("https://github.com/madnesslabs/fireenjin-components.git", `${!defaultNamespace ? answers.namespace + "/" : ""}components`));
-        await rimraf.sync(`${!defaultNamespace ? answers.namespace + "/" : ""}components/.git`);
+        console.log("Cloning Components Repo...");
+        const componentsDir = `${!defaultNamespace ? answers.namespace + "/" : ""}components`;
+        results.repos.push(await Git.Clone("https://github.com/madnesslabs/fireenjin-components.git", componentsDir));
+        await rimraf.sync(`${componentsDir}/.git`);
+        console.log("Installing Components Dependencies...");
+        await runCommand(`npm install`, { cwd: componentsDir });
+        console.log("Setting Up Components GIT and Making Initial Commit...");
+        await runCommand(`git init`, { cwd: componentsDir });
+        await runCommand(`git add .`, { cwd: componentsDir });
+        await runCommand(`git commit -m "Initial Commit"`, { cwd: componentsDir });
       }
     }
     

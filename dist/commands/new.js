@@ -43,8 +43,19 @@ var nodegit_1 = __importDefault(require("nodegit"));
 var inquirer_1 = __importDefault(require("inquirer"));
 var path_1 = __importDefault(require("path"));
 var rimraf_1 = __importDefault(require("rimraf"));
+var child_process_1 = require("child_process");
+var runCommand = function (command, options) {
+    if (options === void 0) { options = null; }
+    return new Promise(function (resolve, reject) {
+        child_process_1.exec(command, options, function (err, stdout) {
+            if (err)
+                reject(err);
+            resolve(stdout);
+        });
+    });
+};
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var defaultNamespace, results, pathParts, answers, _a, _b, _c, _d, _e, _f;
+    var defaultNamespace, results, pathParts, answers, appDir, _a, _b, backendDir, _c, _d, componentsDir, _e, _f;
     var _g, _h, _j;
     return __generator(this, function (_k) {
         switch (_k.label) {
@@ -68,6 +79,11 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                 }
                                 return true;
                             }
+                        },
+                        {
+                            type: 'input',
+                            name: 'organization',
+                            message: "What's your organization name?",
                         },
                         {
                             type: 'checkbox',
@@ -97,37 +113,85 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                     ])];
             case 1:
                 answers = _k.sent();
-                if (!answers) return [3 /*break*/, 10];
-                if (!((_g = answers === null || answers === void 0 ? void 0 : answers.repos) === null || _g === void 0 ? void 0 : _g.includes("App"))) return [3 /*break*/, 4];
+                if (!answers) return [3 /*break*/, 22];
+                if (!((_g = answers === null || answers === void 0 ? void 0 : answers.repos) === null || _g === void 0 ? void 0 : _g.includes("App"))) return [3 /*break*/, 8];
+                console.log("Cloning App Repo...");
+                appDir = (!defaultNamespace ? answers.namespace + "/" : "") + "app";
                 _b = (_a = results.repos).push;
-                return [4 /*yield*/, nodegit_1.default.Clone("https://github.com/madnesslabs/fireenjin-app.git", (!defaultNamespace ? answers.namespace + "/" : "") + "app")];
+                return [4 /*yield*/, nodegit_1.default.Clone("https://github.com/madnesslabs/fireenjin-app.git", appDir)];
             case 2:
                 _b.apply(_a, [_k.sent()]);
-                return [4 /*yield*/, rimraf_1.default.sync((!defaultNamespace ? answers.namespace + "/" : "") + "app/.git")];
+                return [4 /*yield*/, rimraf_1.default.sync(appDir + "/.git")];
             case 3:
                 _k.sent();
-                _k.label = 4;
+                console.log("Installing App Dependencies...");
+                return [4 /*yield*/, runCommand("npm install", { cwd: appDir })];
             case 4:
-                if (!((_h = answers === null || answers === void 0 ? void 0 : answers.repos) === null || _h === void 0 ? void 0 : _h.includes("Backend"))) return [3 /*break*/, 7];
-                _d = (_c = results.repos).push;
-                return [4 /*yield*/, nodegit_1.default.Clone("https://github.com/madnesslabs/fireenjin-backend.git", (!defaultNamespace ? answers.namespace + "/" : "") + "backend")];
+                _k.sent();
+                console.log("Setting Up App GIT and Making Initial Commit...");
+                return [4 /*yield*/, runCommand("git init", { cwd: appDir })];
             case 5:
-                _d.apply(_c, [_k.sent()]);
-                return [4 /*yield*/, rimraf_1.default.sync((!defaultNamespace ? answers.namespace + "/" : "") + "backend/.git")];
+                _k.sent();
+                return [4 /*yield*/, runCommand("git add .", { cwd: appDir })];
             case 6:
                 _k.sent();
-                _k.label = 7;
+                return [4 /*yield*/, runCommand("git commit -m \"Initial Commit\"", { cwd: appDir })];
             case 7:
-                if (!((_j = answers === null || answers === void 0 ? void 0 : answers.repos) === null || _j === void 0 ? void 0 : _j.includes("Components"))) return [3 /*break*/, 10];
-                _f = (_e = results.repos).push;
-                return [4 /*yield*/, nodegit_1.default.Clone("https://github.com/madnesslabs/fireenjin-components.git", (!defaultNamespace ? answers.namespace + "/" : "") + "components")];
-            case 8:
-                _f.apply(_e, [_k.sent()]);
-                return [4 /*yield*/, rimraf_1.default.sync((!defaultNamespace ? answers.namespace + "/" : "") + "components/.git")];
-            case 9:
                 _k.sent();
-                _k.label = 10;
-            case 10: return [2 /*return*/, results];
+                _k.label = 8;
+            case 8:
+                if (!((_h = answers === null || answers === void 0 ? void 0 : answers.repos) === null || _h === void 0 ? void 0 : _h.includes("Backend"))) return [3 /*break*/, 15];
+                console.log("Cloning Backend Repo...");
+                backendDir = (!defaultNamespace ? answers.namespace + "/" : "") + "backend";
+                _d = (_c = results.repos).push;
+                return [4 /*yield*/, nodegit_1.default.Clone("https://github.com/madnesslabs/fireenjin-backend.git", backendDir)];
+            case 9:
+                _d.apply(_c, [_k.sent()]);
+                return [4 /*yield*/, rimraf_1.default.sync(backendDir + "/.git")];
+            case 10:
+                _k.sent();
+                console.log("Installing Backend Dependencies...");
+                return [4 /*yield*/, runCommand("npm install", { cwd: backendDir })];
+            case 11:
+                _k.sent();
+                console.log("Setting Up Backend GIT and Making Initial Commit...");
+                return [4 /*yield*/, runCommand("git init", { cwd: backendDir })];
+            case 12:
+                _k.sent();
+                return [4 /*yield*/, runCommand("git add .", { cwd: backendDir })];
+            case 13:
+                _k.sent();
+                return [4 /*yield*/, runCommand("git commit -m \"Initial Commit\"", { cwd: backendDir })];
+            case 14:
+                _k.sent();
+                _k.label = 15;
+            case 15:
+                if (!((_j = answers === null || answers === void 0 ? void 0 : answers.repos) === null || _j === void 0 ? void 0 : _j.includes("Components"))) return [3 /*break*/, 22];
+                console.log("Cloning Components Repo...");
+                componentsDir = (!defaultNamespace ? answers.namespace + "/" : "") + "components";
+                _f = (_e = results.repos).push;
+                return [4 /*yield*/, nodegit_1.default.Clone("https://github.com/madnesslabs/fireenjin-components.git", componentsDir)];
+            case 16:
+                _f.apply(_e, [_k.sent()]);
+                return [4 /*yield*/, rimraf_1.default.sync(componentsDir + "/.git")];
+            case 17:
+                _k.sent();
+                console.log("Installing Components Dependencies...");
+                return [4 /*yield*/, runCommand("npm install", { cwd: componentsDir })];
+            case 18:
+                _k.sent();
+                console.log("Setting Up Components GIT and Making Initial Commit...");
+                return [4 /*yield*/, runCommand("git init", { cwd: componentsDir })];
+            case 19:
+                _k.sent();
+                return [4 /*yield*/, runCommand("git add .", { cwd: componentsDir })];
+            case 20:
+                _k.sent();
+                return [4 /*yield*/, runCommand("git commit -m \"Initial Commit\"", { cwd: componentsDir })];
+            case 21:
+                _k.sent();
+                _k.label = 22;
+            case 22: return [2 /*return*/, results];
         }
     });
 }); });
