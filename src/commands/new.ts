@@ -28,7 +28,7 @@ export default async () => {
           return process?.argv[3] ? process.argv[3] : pathParts[pathParts.length - 1];
         },
         validate: function(answer) {
-          if (answer !== path.dirname(process.cwd()).split(path.sep).pop()) {
+          if (answer !== pathParts[pathParts.length - 1]) {
             defaultNamespace = false;
           }
           

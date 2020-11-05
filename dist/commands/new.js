@@ -74,7 +74,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                 return (process === null || process === void 0 ? void 0 : process.argv[3]) ? process.argv[3] : pathParts[pathParts.length - 1];
                             },
                             validate: function (answer) {
-                                if (answer !== path_1.default.dirname(process.cwd()).split(path_1.default.sep).pop()) {
+                                if (answer !== pathParts[pathParts.length - 1]) {
                                     defaultNamespace = false;
                                 }
                                 return true;
