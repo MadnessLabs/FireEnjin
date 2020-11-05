@@ -7,6 +7,7 @@ import copyCommand from "./commands/copy";
 import envCommand from "./commands/env";
 import generateCommand from "./commands/generate";
 import migrateCommand from "./commands/migrate";
+import newCommand from "./commands/new";
 import runSeedCommand from "./commands/runSeed";
 import randomSeedCommand from "./commands/randomSeed";
 
@@ -27,6 +28,8 @@ if (process.argv.length > 2) {
     migrateCommand().catch(err => console.log(err));
   } else if (process.argv[2] === "triggers") {
     triggersCommand().catch(err => console.log(err));
+  } else if (process.argv[2] === "new") {
+    newCommand().catch(err => console.log(err));
   } else {
     console.log(`${process.argv[2]} command doesn't exist!`);
   }

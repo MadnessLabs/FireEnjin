@@ -32,6 +32,10 @@ This command generated a file or a list of files based off templates.
 
 This command runs all migrations and stores results in Firestore.
 
+**new**
+
+This command will walk you through setting up a new project.
+
 **seed**
 
 This command allows you to deploy seeds from your project to Firestore.
