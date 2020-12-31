@@ -55,7 +55,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                 return __generator(this, function (_a) {
                                     try {
                                         fs.writeFileSync(location, dataFilter(data));
-                                        resolve();
+                                        resolve(data);
                                     }
                                     catch (err) {
                                         reject(err);

@@ -150,7 +150,7 @@ export default async () => {
               )
             );
             seedsClonedCount++;
-            resolve();
+            resolve(data);
           } catch (err) {
             reject(err);
           }

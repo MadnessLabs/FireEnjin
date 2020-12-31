@@ -209,7 +209,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                         case 2:
                                             _a.sent();
                                             seedsClonedCount++;
-                                            resolve();
+                                            resolve(data);
                                             return [3 /*break*/, 4];
                                         case 3:
                                             err_1 = _a.sent();

@@ -50,7 +50,7 @@ function renderToFile(templateName, location, dataFilter) {
                             return __generator(this, function (_a) {
                                 try {
                                     fs.writeFileSync(location, dataFilter(data));
-                                    resolve();
+                                    resolve(data);
                                 }
                                 catch (err) {
                                     reject(err);

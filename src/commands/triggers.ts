@@ -14,7 +14,7 @@ async function renderToFile(
       async (_err: any, data: any) => {
         try {
           fs.writeFileSync(location, dataFilter(data));
-          resolve();
+          resolve(data);
         } catch (err) {
           reject(err);
         }

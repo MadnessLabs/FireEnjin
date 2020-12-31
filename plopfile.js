@@ -5,6 +5,28 @@ const hasStorybook = Object.keys(package.devDependencies).includes(
 );
 const enjinSettings = package.enjin ? package.enjin : {};
 
+function camelize(text) {
+  return text.replace(
+    /^([A-Z])|[\s-_]+(\w)/g,
+    function (match, p1, p2, offset) {
+      if (p2) return p2.toUpperCase();
+      return p1.toLowerCase();
+    }
+  );
+}
+
+function pascalize(string) {
+  return `${string}`
+    .replace(new RegExp(/[-_]+/, "g"), " ")
+    .replace(new RegExp(/[^\w\s]/, "g"), "")
+    .replace(
+      new RegExp(/\s+(.)(\w+)/, "g"),
+      ($1, $2, $3) => `${$2.toUpperCase() + $3.toLowerCase()}`
+    )
+    .replace(new RegExp(/\s/, "g"), "")
+    .replace(new RegExp(/\w/), (s) => s.toUpperCase());
+}
+
 function dateStringToYMD(str) {
   const d = str ? new Date(Date.parse(str)) : new Date();
 
@@ -35,11 +57,13 @@ function dateStringToYMDHIS(str) {
   );
 }
 
-module.exports = function(plop) {
+module.exports = function (plop) {
   process.env.enjinProjectDir = process.env.enjinProjectDir
     ? process.env.enjinProjectDir
     : process.cwd();
   plop.setHelper("plural", (txt) => pluralize(txt));
+  plop.setHelper("pluralCamel", (txt) => camelize(pluralize(txt)));
+  plop.setHelper("pluralPascal", (txt) => pascalize(pluralize(txt)));
   plop.setGenerator("input", {
     description: "define data structure of an input",
     prompts: [
@@ -253,12 +277,90 @@ module.exports = function(plop) {
         name: "name",
         message: "The name of the new model",
       },
+      {
+        type: "confirm",
+        name: "queries",
+        message: "Generate CRUD queries?",
+        default: true,
+      },
     ],
-    actions: [
+    actions: (data) => {
+      let actions = [
+        {
+          type: "add",
+          path: `${process.env.enjinProjectDir}/src/models/{{pascalCase name}}.ts`,
+          templateFile: `${__dirname}/templates/model.hbs`,
+        },
+      ];
+
+      if (data.queries) {
+        actions = [
+          ...actions,
+          {
+            type: "add",
+            path: `${process.env.enjinProjectDir}/src/queries/add{{pascalCase name}}.gql`,
+            templateFile: `${__dirname}/templates/query-add.hbs`,
+          },
+          {
+            type: "add",
+            path: `${process.env.enjinProjectDir}/src/queries/edit{{pascalCase name}}.gql`,
+            templateFile: `${__dirname}/templates/query-edit.hbs`,
+          },
+          {
+            type: "add",
+            path: `${process.env.enjinProjectDir}/src/queries/delete{{pascalCase name}}.gql`,
+            templateFile: `${__dirname}/templates/query-delete.hbs`,
+          },
+          {
+            type: "add",
+            path: `${process.env.enjinProjectDir}/src/queries/find{{pascalCase name}}.gql`,
+            templateFile: `${__dirname}/templates/query-find.hbs`,
+          },
+          {
+            type: "add",
+            path: `${process.env.enjinProjectDir}/src/queries/list{{pascalCase name}}.gql`,
+            templateFile: `${__dirname}/templates/query-list.hbs`,
+          },
+        ];
+      }
+
+      return actions;
+    },
+  });
+  plop.setGenerator("queries", {
+    description: "Generate queries for an endpoint",
+    prompts: [
+      {
+        type: "input",
+        name: "name",
+        message: "The name of the model these are for",
+      },
+    ],
+    actions: (data) => [
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/models/{{pascalCase name}}.ts`,
-        templateFile: `${__dirname}/templates/model.hbs`,
+        path: `${process.env.enjinProjectDir}/src/queries/add{{pascalCase name}}.gql`,
+        templateFile: `${__dirname}/templates/query-add.hbs`,
+      },
+      {
+        type: "add",
+        path: `${process.env.enjinProjectDir}/src/queries/edit{{pascalCase name}}.gql`,
+        templateFile: `${__dirname}/templates/query-edit.hbs`,
+      },
+      {
+        type: "add",
+        path: `${process.env.enjinProjectDir}/src/queries/delete{{pascalCase name}}.gql`,
+        templateFile: `${__dirname}/templates/query-delete.hbs`,
+      },
+      {
+        type: "add",
+        path: `${process.env.enjinProjectDir}/src/queries/find{{pascalCase name}}.gql`,
+        templateFile: `${__dirname}/templates/query-find.hbs`,
+      },
+      {
+        type: "add",
+        path: `${process.env.enjinProjectDir}/src/queries/list{{pascalCase name}}.gql`,
+        templateFile: `${__dirname}/templates/query-list.hbs`,
       },
     ],
   });
