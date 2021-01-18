@@ -61,7 +61,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
     var entries, command;
     return __generator(this, function (_a) {
         entries = fg.sync(['src/**/*.presets.ts']);
-        command = "tsc " + entries.join(" ") + " --out " + (process.argv[2] ? process.argv[2] : "www/presets.js") + " --module amd " + (process.argv[3] === 'watch' ? '--watch' : "");
+        command = "tsc " + entries.join(" ") + " --out " + (process.argv[3] ? process.argv[3] : "www/presets.js") + " --module amd " + (process.argv[3] === 'watch' || process.argv[4] === 'watch' ? '--watch' : "");
         child_process_1.exec(command, function (error, stdout, stderr) {
             if (error !== null) {
                 console.log('exec error: ' + error, stderr);
