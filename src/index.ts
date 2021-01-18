@@ -8,6 +8,7 @@ import envCommand from "./commands/env";
 import generateCommand from "./commands/generate";
 import migrateCommand from "./commands/migrate";
 import newCommand from "./commands/new";
+import presetsCommand from "./commands/presets";
 import runSeedCommand from "./commands/runSeed";
 import randomSeedCommand from "./commands/randomSeed";
 
@@ -22,6 +23,8 @@ if (process.argv.length > 2) {
     cloneSeedCommand().catch(err => console.log(err));
   } else if (process.argv[2] === "seed") {
     runSeedCommand().catch(err => console.log(err));
+  } else if (process.argv[2] === "presets") {
+    presetsCommand().catch(err => console.log(err));
   } else if (process.argv[2] === "env") {
     envCommand().catch(err => console.log(err));
   } else if (process.argv[2] === "migrate") {

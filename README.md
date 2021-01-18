@@ -36,6 +36,10 @@ This command runs all migrations and stores results in Firestore.
 
 This command will walk you through setting up a new project.
 
+**presets**
+
+This command will compile all of your presets into a javascript file.
+
 **seed**
 
 This command allows you to deploy seeds from your project to Firestore.
