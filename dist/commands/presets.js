@@ -63,7 +63,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
         entries = fg.sync(['src/**/*.presets.ts']);
         if (!(entries === null || entries === void 0 ? void 0 : entries.length))
             throw new Error("No presets found...");
-        command = "tsc " + entries.join(" ") + " --out " + (process.argv[3] && process.argv[3] !== "watch" ? process.argv[3] : "www/presets.js") + " --module amd " + (process.argv[3] === 'watch' || process.argv[4] === 'watch' ? '--watch' : "");
+        command = "tsc " + entries.join(" ") + " --out " + (process.argv[3] && process.argv[3] !== "watch" ? process.argv[3] : "www/presets.js") + " --module amd " + (process.argv[3] === 'watch' || process.argv[4] === 'watch' ? '--watch' : "") + " --moduleResolution node";
         child_process_1.exec(command, function (error, stdout, stderr) {
             if (error !== null) {
                 console.log('exec error: ' + error, stdout, stderr);
