@@ -30,6 +30,7 @@
     "nodegit": "^0.27.0",
     "plop": "^2.7.4",
     "pluralize": "^8.0.0",
+    "prepend-file": "^2.0.0",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "yargs": "^16.2.0"
