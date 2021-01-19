@@ -1,6 +1,5 @@
 import * as fg from "fast-glob";
 import { exec } from 'child_process';
-import prependFile from "prepend-file";
 
 export default async () => {
   const entries = fg.sync(['src/**/*.presets.ts']); 
@@ -11,15 +10,6 @@ export default async () => {
       if (error !== null) {
           console.log('exec error: ' + error, stdout, stderr);
       }
-      await prependFile(process.argv[3] && process.argv[3] !== "watch" ? process.argv[3] : "www/presets.js", `
-function define(name, dependencies, callback) {
-  let exports = {};
-  callback({}, exports);
-  if (!window.presets) window.presets = {};
-  window.presets[name] = exports.default;
-};
-
-      `);
       console.log('Completed rendering presets...')
   });
 };

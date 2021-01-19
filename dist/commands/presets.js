@@ -54,13 +54,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var fg = __importStar(require("fast-glob"));
 var child_process_1 = require("child_process");
-var prepend_file_1 = __importDefault(require("prepend-file"));
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
     var entries, command;
     return __generator(this, function (_a) {
@@ -71,17 +67,11 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
         child_process_1.exec(command, function (error, stdout, stderr) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            if (error !== null) {
-                                console.log('exec error: ' + error, stdout, stderr);
-                            }
-                            return [4 /*yield*/, prepend_file_1.default(process.argv[3] && process.argv[3] !== "watch" ? process.argv[3] : "www/presets.js", "\nfunction define(name, dependencies, callback) {\n  let exports = {};\n  callback({}, exports);\n  if (!window.presets) window.presets = {};\n  window.presets[name] = exports.default;\n};\n\n      ")];
-                        case 1:
-                            _a.sent();
-                            console.log('Completed rendering presets...');
-                            return [2 /*return*/];
+                    if (error !== null) {
+                        console.log('exec error: ' + error, stdout, stderr);
                     }
+                    console.log('Completed rendering presets...');
+                    return [2 /*return*/];
                 });
             });
         });
