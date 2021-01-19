@@ -3,5 +3,5 @@ function define(name, dependencies, callback) {
     let exports:any = {};
     callback({}, exports);
     if (!(window as any).presets) (window as any).presets = {};
-    (window as any).presets[name.split['/'].pop()] = exports.default;
+    (window as any).presets[name.split('/').pop()] = exports.default;
 };
