@@ -6,6 +6,6 @@ function define(name, dependencies, callback) {
     callback({}, exports);
     if (!window.presets)
         window.presets = {};
-    window.presets[name.split['/'].pop()] = exports.default;
+    window.presets[name.split('/').pop()] = exports.default;
 }
 ;
