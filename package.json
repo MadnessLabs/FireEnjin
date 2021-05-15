@@ -24,7 +24,6 @@
     "faker": "^5.5.3",
     "firebase-admin": "^9.8.0",
     "fs-extra": "^10.0.0",
-    "glob-copy": "^0.1.0",
     "globby": "^11.0.3",
     "inquirer": "^8.0.0",
     "nodegit": "^0.27.0",
