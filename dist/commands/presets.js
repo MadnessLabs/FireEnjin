@@ -1,23 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -54,34 +35,36 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var fg = __importStar(require("fast-glob"));
+var globby = require("globby");
 var child_process_1 = require("child_process");
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
     var entries, command;
     return __generator(this, function (_a) {
-        entries = fg.sync(['src/**/*.presets.ts']);
-        if (!(entries === null || entries === void 0 ? void 0 : entries.length))
-            throw new Error("No presets found...");
-        command = "tsc " + __spreadArrays([__dirname + '/presetsDefine.js'], entries).join(" ") + " --out " + (process.argv[3] && process.argv[3] !== "watch" ? process.argv[3] : "www/presets.js") + " --module amd " + (process.argv[3] === 'watch' || process.argv[4] === 'watch' ? '--watch' : "") + " --moduleResolution node --allowJs";
-        child_process_1.exec(command, function (error, stdout, stderr) {
-            return __awaiter(this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    if (error !== null) {
-                        console.log('exec error: ' + error, stdout, stderr);
-                    }
-                    console.log('Completed rendering presets...');
-                    return [2 /*return*/];
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, globby('src/**/*.presets.ts')];
+            case 1:
+                entries = _a.sent();
+                if (!(entries === null || entries === void 0 ? void 0 : entries.length))
+                    throw new Error("No presets found...");
+                command = "tsc " + __spreadArray([__dirname + '/presetsDefine.js'], entries).join(" ") + " --out " + (process.argv[3] && process.argv[3] !== "watch" ? process.argv[3] : "www/presets.js") + " --module amd " + (process.argv[3] === 'watch' || process.argv[4] === 'watch' ? '--watch' : "") + " --moduleResolution node --allowJs";
+                child_process_1.exec(command, function (error, stdout, stderr) {
+                    return __awaiter(this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            if (error !== null) {
+                                console.log('exec error: ' + error, stdout, stderr);
+                            }
+                            console.log('Completed rendering presets...');
+                            return [2 /*return*/];
+                        });
+                    });
                 });
-            });
-        });
-        return [2 /*return*/];
+                return [2 /*return*/];
+        }
     });
 }); });

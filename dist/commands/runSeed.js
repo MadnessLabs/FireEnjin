@@ -72,7 +72,8 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                 seedCount = 0;
                 seedGlob = (process.argv[3]
                     ? process.argv[3]
-                    : (env === null || env === void 0 ? void 0 : env.defaultSeeds) ? env.defaultSeeds
+                    : (env === null || env === void 0 ? void 0 : env.defaultSeeds)
+                        ? env.defaultSeeds
                         : getDirectories(process.cwd() + "/dist/seeds").join(","))
                     .split(",")
                     .map(function (collection) { return "./dist/seeds/" + collection + "/**/*.js"; });
