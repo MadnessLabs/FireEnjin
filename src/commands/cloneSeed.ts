@@ -102,13 +102,13 @@ export default async () => {
       ) {
         data[
           key
-        ] = `<@db.collection('${data[key]._path.segments[0]}').doc('${data[key]._path.segments[1]}')@>`;
+        ] = `<@db.collection('${data[key]._path.segments[0]}').doc('${data[key]._path.segments[1]}')@> as any`;
       } else if (
         value &&
         value.constructor &&
         value.constructor.name === "Timestamp"
       ) {
-        data[key] = `<@new Date('${value.toDate()}')@>`;
+        data[key] = `<@new Date('${value.toDate()}')@> as any`;
       } else if (
         value &&
         value.constructor &&
