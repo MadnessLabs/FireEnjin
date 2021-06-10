@@ -146,13 +146,13 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                         if (!(value &&
                             value.constructor &&
                             value.constructor.name === "DocumentReference")) return [3 /*break*/, 4];
-                        data[key] = "<@db.collection('" + data[key]._path.segments[0] + "').doc('" + data[key]._path.segments[1] + "')@>";
+                        data[key] = "<@db.collection('" + data[key]._path.segments[0] + "').doc('" + data[key]._path.segments[1] + "')@> as any";
                         return [3 /*break*/, 10];
                     case 4:
                         if (!(value &&
                             value.constructor &&
                             value.constructor.name === "Timestamp")) return [3 /*break*/, 5];
-                        data[key] = "<@new Date('" + value.toDate() + "')@>";
+                        data[key] = "<@new Date('" + value.toDate() + "')@> as any";
                         return [3 /*break*/, 10];
                     case 5:
                         if (!(value &&
