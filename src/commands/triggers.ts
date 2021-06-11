@@ -137,7 +137,6 @@ export default async () => {
             modelName
           )}",  async (req, res) => {
   const model = new ${modelName}.${modelName}Model();
-  console.log(JSON.stringify(hookOptions));
   if (
     model.onAuth &&
     typeof model.onAuth === "function" &&
@@ -175,21 +174,25 @@ export default async () => {
           endpointStr += `app.post("/${camelize(
             modelName
           )}", async (req, res) => {
+  const requestInput = typeof req?.body === "string" ? JSON.parse(requestInput) : requestInput;
+  if (typeof requestInput === "string") return res.status(400).send({
+    message: "Invalid doc data input!"
+  });
   const model = new ${modelName}.${modelName}Model();
   if (
     model.onAuth &&
     typeof model.onAuth === "function" &&
-    !(await model.onAuth("add", req.body, hookOptions))
+    !(await model.onAuth("add", requestInput, hookOptions))
   )
     return res.status(400).send({
       message: "Permission Denied!"
     });
   const docData =
     model.onBeforeAdd && typeof model.onBeforeAdd === "function"
-      ? await model.onBeforeAdd(req.body, hookOptions)
+      ? await model.onBeforeAdd(requestInput, hookOptions)
       : model.onBeforeWrite && typeof model.onBeforeWrite === "function"
-      ? await model.onBeforeWrite(req.body, hookOptions)
-      : req.body;
+      ? await model.onBeforeWrite(requestInput, hookOptions)
+      : requestInput;
   if (docData === false) {
     return res.status(400).send({
       message: "No data for doc!"
@@ -205,7 +208,7 @@ export default async () => {
         : model.onAfterWrite && typeof model.onAfterWrite === "function"
         ? await model.onAfterWrite(newDoc, hookOptions)
         : newDoc
-    , {with: req.body.with, include: req.body.include, exclude: req.body.exclude})
+    , {with: requestInput.with, include: requestInput.include, exclude: requestInput.exclude})
   );
 });\n`;
         } catch (e) {
@@ -225,20 +228,24 @@ export default async () => {
           endpointStr += `app.post("/${camelize(
             modelName
           )}/:id", async (req, res) => {
+  const requestInput = typeof req?.body === "string" ? JSON.parse(requestInput) : requestInput;
+  if (typeof requestInput === "string") return res.status(400).send({
+    message: "Invalid doc data input!"
+  });
   const model = new ${modelName}.${modelName}Model();
   if (
     model.onAuth &&
     typeof model.onAuth === "function" &&
-    !(await model.onAuth("edit", { ...req.body, id: req.params.id }, hookOptions))
+    !(await model.onAuth("edit", { ...requestInput, id: req.params.id }, hookOptions))
   )
     return res.status(400).send({
       message: "Permission Denied!"
     });
   const docData =
     model.onBeforeEdit && typeof model.onBeforeEdit === "function"
-      ? await model.onBeforeEdit({ id: req.params.id, ...req.body }, hookOptions)
+      ? await model.onBeforeEdit({ id: req.params.id, ...requestInput }, hookOptions)
       : model.onBeforeWrite && typeof model.onBeforeWrite === "function"
-      ? await model.onBeforeWrite({ id: req.params.id, ...req.body }, hookOptions)
+      ? await model.onBeforeWrite({ id: req.params.id, ...requestInput }, hookOptions)
       : data;
   if (docData === false) {
     return res.status(400).send({
@@ -246,7 +253,7 @@ export default async () => {
     });
   }
 
-  const doc = await model.update({ id: req.params.id, ...req.body });
+  const doc = await model.update({ id: req.params.id, ...requestInput });
   
   return res.send(
     await cleanData(
@@ -255,7 +262,7 @@ export default async () => {
         : model.onAfterWrite && typeof model.onAfterWrite === "function"
         ? await model.onAfterWrite(doc, hookOptions)
         : doc
-    , {with: req.body.with, include: req.body.include, exclude: req.body.exclude})
+    , {with: requestInput.with, include: requestInput.include, exclude: requestInput.exclude})
   );
 });\n`;
         } catch (e) {
@@ -278,6 +285,10 @@ export default async () => {
           endpointStr += `app.delete("/${camelize(
             modelName
           )}/:id", async (req, res) => {
+  const requestInput = typeof req?.body === "string" ? JSON.parse(requestInput) : requestInput;
+  if (typeof requestInput === "string") return res.status(400).send({
+    message: "Invalid doc data input!"
+  });
   const model = new ${modelName}.${modelName}Model();
   if (
     model.onAuth &&
