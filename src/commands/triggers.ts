@@ -174,7 +174,7 @@ export default async () => {
           endpointStr += `app.post("/${camelize(
             modelName
           )}", async (req, res) => {
-  const requestInput = typeof req.body === "string" ? JSON.parse(requestInput) : requestInput;
+  const requestInput = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
   if (typeof requestInput === "string") return res.status(400).send({
     message: "Invalid doc data input!"
   });
@@ -228,7 +228,7 @@ export default async () => {
           endpointStr += `app.post("/${camelize(
             modelName
           )}/:id", async (req, res) => {
-  const requestInput = typeof req.body === "string" ? JSON.parse(requestInput) : requestInput;
+  const requestInput = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
   if (typeof requestInput === "string") return res.status(400).send({
     message: "Invalid doc data input!"
   });
@@ -285,7 +285,7 @@ export default async () => {
           endpointStr += `app.delete("/${camelize(
             modelName
           )}/:id", async (req, res) => {
-  const requestInput = typeof req.body === "string" ? JSON.parse(requestInput) : requestInput;
+  const requestInput = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
   if (typeof requestInput === "string") return res.status(400).send({
     message: "Invalid doc data input!"
   });
