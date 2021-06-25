@@ -175,6 +175,7 @@ export default async () => {
     const cleanData = await checkForReferences(documentData);
     const seedContent = JSON.stringify(cleanData, null, 2)
       .replace(/"<@/g, "")
+      .replace(/@> as any"/g, "")
       .replace(/@>"/g, "");
 
     return await renderSeed(

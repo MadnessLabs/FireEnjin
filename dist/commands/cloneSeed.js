@@ -252,6 +252,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                         cleanData = _a.sent();
                         seedContent = JSON.stringify(cleanData, null, 2)
                             .replace(/"<@/g, "")
+                            .replace(/@> as any"/g, "")
                             .replace(/@>"/g, "");
                         return [4 /*yield*/, renderSeed(seedDir + "/" + collectionName + "/" + (id ? id : documentId) + ".ts", seedContent)];
                     case 2: return [2 /*return*/, _a.sent()];
