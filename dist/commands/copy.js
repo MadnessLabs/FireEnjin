@@ -42,7 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var recursive_copy_1 = __importDefault(require("recursive-copy"));
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        recursive_copy_1.default(process.argv[3], process.argv[4], {
+        (0, recursive_copy_1.default)(process.argv[3], process.argv[4], {
             overwrite: true,
         });
         return [2 /*return*/];

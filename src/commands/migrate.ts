@@ -10,7 +10,7 @@ function connectDatabase() {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccountKey),
     databaseURL: `https://${project}.firebaseio.com`,
-    storageBucket: `${project}.appspot.com`
+    storageBucket: `${project}.appspot.com`,
   });
 
   return admin.firestore();
@@ -20,7 +20,7 @@ export default async () => {
   let migrationCount = 0;
   const dryRun = process.argv[3] && process.argv[3] === "dry" ? true : false;
   globby([`./dist/migrations/**/*.js`], { cwd: process.cwd() }).then(
-    async files => {
+    async (files) => {
       const db = connectDatabase();
       for (const file of files) {
         const pathArr = file.split("/");
@@ -47,8 +47,8 @@ export default async () => {
         try {
           result = await currentMigration.up();
         } catch (error) {
-          console.log(`Error running ${migrationName} migration...`);
-          throw new Error(error);
+          console.log(error);
+          throw new Error(`Error running ${migrationName} migration...`);
         }
 
         if (dryRun) {
@@ -58,11 +58,11 @@ export default async () => {
         try {
           await docRef.set({
             result,
-            createdAt: admin.firestore.Timestamp.fromDate(new Date())
+            createdAt: admin.firestore.Timestamp.fromDate(new Date()),
           });
         } catch (error) {
-          console.log(`Error saving ${migrationName} migration results...`);
-          throw new Error(error);
+          console.log(error);
+          throw new Error(`Error saving ${migrationName} migration results...`);
         }
 
         migrationCount = migrationCount + 1;

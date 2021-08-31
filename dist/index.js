@@ -36,34 +36,34 @@ var runSeed_1 = __importDefault(require("./commands/runSeed"));
 var randomSeed_1 = __importDefault(require("./commands/randomSeed"));
 if (process.argv.length > 2) {
     if (process.argv[2] === "copy") {
-        copy_1.default().catch(function (err) { return console.log(err); });
+        (0, copy_1.default)().catch(function (err) { return console.log(err); });
     }
     else if (process.argv[2] === "generate") {
-        generate_1.default().catch(function (err) { return console.log(err); });
+        (0, generate_1.default)().catch(function (err) { return console.log(err); });
     }
     else if (process.argv[2] === "seed:random") {
-        randomSeed_1.default().catch(function (err) { return console.log(err); });
+        (0, randomSeed_1.default)().catch(function (err) { return console.log(err); });
     }
     else if (process.argv[2] === "seed:clone") {
-        cloneSeed_1.default().catch(function (err) { return console.log(err); });
+        (0, cloneSeed_1.default)().catch(function (err) { return console.log(err); });
     }
     else if (process.argv[2] === "seed") {
-        runSeed_1.default().catch(function (err) { return console.log(err); });
+        (0, runSeed_1.default)().catch(function (err) { return console.log(err); });
     }
     else if (process.argv[2] === "presets") {
-        presets_1.default().catch(function (err) { return console.log(err); });
+        (0, presets_1.default)().catch(function (err) { return console.log(err); });
     }
     else if (process.argv[2] === "env") {
-        env_1.default().catch(function (err) { return console.log(err); });
+        (0, env_1.default)().catch(function (err) { return console.log(err); });
     }
     else if (process.argv[2] === "migrate") {
-        migrate_1.default().catch(function (err) { return console.log(err); });
+        (0, migrate_1.default)().catch(function (err) { return console.log(err); });
     }
     else if (process.argv[2] === "triggers") {
-        triggers_1.default().catch(function (err) { return console.log(err); });
+        (0, triggers_1.default)().catch(function (err) { return console.log(err); });
     }
     else if (process.argv[2] === "new") {
-        new_1.default().catch(function (err) { return console.log(err); });
+        (0, new_1.default)().catch(function (err) { return console.log(err); });
     }
     else {
         console.log(process.argv[2] + " command doesn't exist!");
