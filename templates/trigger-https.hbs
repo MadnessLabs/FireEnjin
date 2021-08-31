@@ -3,7 +3,7 @@ import * as functions from "firebase-functions";
 import connect from "../connect";
 connect();
 
-import {{camelCase name}} from "../units/{{camelCase name}}/{{camelCase name}}";
+import {{nameFromPathCamel name}} from "../units/{{nameFromPathCamel name}}/{{nameFromPathCamel name}}";
 
 const cors = require("cors")({ origin: true });
 
@@ -14,7 +14,7 @@ export default functions.https.onRequest(async (req, res) => {
   cors(req, res, async () => {
     try {
       return res.status(200).send({
-        ...(await {{camelCase name}}(
+        ...(await {{nameFromPathCamel name}}(
           req.body ? req.body : {}
         ))
       });

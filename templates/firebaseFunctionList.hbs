@@ -3,17 +3,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const functions = require("firebase-functions");
 const connect_1 = require("../connect");
 connect_1.default();
-const {{pascalCase modelName}}_1 = require("../models/{{pascalCase modelName}}");
+const {{nameFromPathPascal modelName}}_1 = require("../models/{{nameFromPathPascal modelName}}");
 const cors = require("cors")({ origin: true });
 exports.default = functions.https.onRequest(async (req, res) => {
     cors(req, res, async () => {
         try {
             return res.status(200).send({
-                {{camelCase modelName}}: await new {{pascalCase modelName}}_1.{{pascalCase modelName}}Model().limit(req.body.limit ? req.body.limit : 15).find()
+                {{nameFromPathCamel modelName}}: await new {{nameFromPathPascal modelName}}_1.{{nameFromPathPascal modelName}}Model().limit(req.body.limit ? req.body.limit : 15).find()
             });
         }
         catch (err) {
-            console.log("Error listing {{camelCase modelName}} documents...", err);
+            console.log("Error listing {{nameFromPathCamel modelName}} documents...", err);
             return res.status(500).send({
                 message: err.message
             });

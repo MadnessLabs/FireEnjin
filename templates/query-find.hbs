@@ -1,5 +1,5 @@
-query find{{pascalCase name}}($id: String!) {
-  {{camelCase name}}(id: $id) {
+query find{{nameFromPathPascal name}}($id: String!) {
+  {{nameFromPathCamel name}}(id: $id) {
     id
   }
 }
