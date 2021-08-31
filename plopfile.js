@@ -1,4 +1,3 @@
-const path = require("path/posix");
 const pluralize = require("pluralize");
 const package = require(`${process.env.enjinProjectDir}/package.json`);
 const hasStorybook = Object.keys(package.devDependencies).includes(
