@@ -1,17 +1,17 @@
 import { Arg, Mutation, Resolver } from "type-graphql";
 
-import {{pascalCase name}}Input from "../units/{{camelCase name}}/{{camelCase name}}.input";
-import {{pascalCase name}}Output from "../units/{{camelCase name}}/{{camelCase name}}.output";
-import {{camelCase name}} from "../units/{{camelCase name}}/{{camelCase name}}";
+import {{nameFromPathPascal name}}Input from "../units/{{nameFromPathCamel name}}/{{nameFromPathCamel name}}.input";
+import {{nameFromPathPascal name}}Output from "../units/{{nameFromPathCamel name}}/{{nameFromPathCamel name}}.output";
+import {{nameFromPathCamel name}} from "../units/{{nameFromPathCamel name}}/{{nameFromPathCamel name}}";
 
 @Resolver()
-export class {{pascalCase name}}Resolver {
-  @Mutation(() => {{pascalCase name}}Output, {
+export class {{nameFromPathPascal name}}Resolver {
+  @Mutation(() => {{nameFromPathPascal name}}Output, {
     description: "{{description}}"
   })
-  async {{camelCase name}}(
-    @Arg("data") data: {{pascalCase name}}Input
-  ): Promise<{{pascalCase name}}Output> {
-    return {{camelCase name}}(data);
+  async {{nameFromPathCamel name}}(
+    @Arg("data") data: {{nameFromPathPascal name}}Input
+  ): Promise<{{nameFromPathPascal name}}Output> {
+    return {{nameFromPathCamel name}}(data);
   }
 }

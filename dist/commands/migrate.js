@@ -45,7 +45,7 @@ function connectDatabase() {
     admin.initializeApp({
         credential: admin.credential.cert(serviceAccountKey),
         databaseURL: "https://" + project + ".firebaseio.com",
-        storageBucket: project + ".appspot.com"
+        storageBucket: project + ".appspot.com",
     });
     return admin.firestore();
 }
@@ -96,8 +96,8 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                         return [3 /*break*/, 9];
                     case 8:
                         error_1 = _b.sent();
-                        console.log("Error running " + migrationName + " migration...");
-                        throw new Error(error_1);
+                        console.log(error_1);
+                        throw new Error("Error running " + migrationName + " migration...");
                     case 9:
                         if (dryRun) {
                             return [3 /*break*/, 14];
@@ -107,15 +107,15 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                         _b.trys.push([10, 12, , 13]);
                         return [4 /*yield*/, docRef.set({
                                 result: result,
-                                createdAt: admin.firestore.Timestamp.fromDate(new Date())
+                                createdAt: admin.firestore.Timestamp.fromDate(new Date()),
                             })];
                     case 11:
                         _b.sent();
                         return [3 /*break*/, 13];
                     case 12:
                         error_2 = _b.sent();
-                        console.log("Error saving " + migrationName + " migration results...");
-                        throw new Error(error_2);
+                        console.log(error_2);
+                        throw new Error("Error saving " + migrationName + " migration results...");
                     case 13:
                         migrationCount = migrationCount + 1;
                         _b.label = 14;

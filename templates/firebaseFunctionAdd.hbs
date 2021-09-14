@@ -3,18 +3,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const functions = require("firebase-functions");
 const connect_1 = require("../connect");
 connect_1.default();
-const {{pascalCase modelName}}_1 = require("../models/{{pascalCase modelName}}");
+const {{nameFromPathPascal modelName}}_1 = require("../models/{{nameFromPathPascal modelName}}");
 const cors = require("cors")({ origin: true });
 exports.default = functions.https.onRequest(async (req, res) => {
     cors(req, res, async () => {
         try {
             const data = req.body ? req.body : {};
             return res.status(200).send({
-                {{camelCase modelName}}: await new {{pascalCase modelName}}_1.{{pascalCase modelName}}Model().create(data)
+                {{nameFromPathCamel modelName}}: await new {{nameFromPathPascal modelName}}_1.{{nameFromPathPascal modelName}}Model().create(data)
             });
         }
         catch (err) {
-            console.log("Error adding {{camelCase modelName}}...", err);
+            console.log("Error adding {{nameFromPathCamel modelName}}...", err);
             return res.status(500).send({
                 message: err.message
             });

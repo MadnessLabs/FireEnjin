@@ -2,8 +2,10 @@ const fbAdmin = require("firebase-admin");
 const fs = require("fs");
 const prettier = require("prettier");
 const readline = require("readline");
-const yargs = require("yargs").default("dir", `${process.cwd()}/src/seeds`)
-  .argv;
+const yargs = require("yargs").default(
+  "dir",
+  `${process.cwd()}/src/seeds`
+).argv;
 
 export default async () => {
   function connectDatabase() {
@@ -14,7 +16,7 @@ export default async () => {
     fbAdmin.initializeApp({
       credential: fbAdmin.credential.cert(serviceAccountKey),
       databaseURL: `https://${project}.firebaseio.com`,
-      storageBucket: `${project}.appspot.com`
+      storageBucket: `${project}.appspot.com`,
     });
 
     return fbAdmin.firestore();
@@ -41,7 +43,7 @@ export default async () => {
         fs.mkdirSync(folderPath);
       }
 
-      fs.writeFile(filename, data, { flag: "wx" }, function(err: any) {
+      fs.writeFile(filename, data, { flag: "wx" }, function (err: any) {
         if (err) {
           if (err.code === "EEXIST") {
             if (documentId && !overwrite) {
@@ -50,7 +52,7 @@ export default async () => {
                 process.stdin,
                 process.stdout
               );
-              rl.question("Overwrite? [yes]/no: ", function(answer) {
+              rl.question("Overwrite? [yes]/no: ", function (answer) {
                 if (answer === "no") {
                   console.log("Not overwritting " + filename);
                   rl.close();
@@ -108,7 +110,9 @@ export default async () => {
         value.constructor &&
         value.constructor.name === "Timestamp"
       ) {
-        data[key] = `<@new Date('${value.toDate()}')@> as any`;
+        data[
+          key
+        ] = `<@admin.firestore.Timestamp.fromDate(new Date('${value.toDate()}'))@> as any`;
       } else if (
         value &&
         value.constructor &&

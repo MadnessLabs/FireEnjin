@@ -1,6 +1,6 @@
 import { Field, InputType } from "type-graphql";
 
 @InputType({ description: "{{description}}" })
-export default class {{pascalCase name}}Input {
+export default class {{nameFromPathPascal name}}Input {
   @Field() id: string;
 }

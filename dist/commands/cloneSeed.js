@@ -40,8 +40,7 @@ var fbAdmin = require("firebase-admin");
 var fs = require("fs");
 var prettier = require("prettier");
 var readline = require("readline");
-var yargs = require("yargs").default("dir", process.cwd() + "/src/seeds")
-    .argv;
+var yargs = require("yargs").default("dir", process.cwd() + "/src/seeds").argv;
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
     function connectDatabase() {
         var serviceAccountKey = JSON.parse(fs.readFileSync(process.cwd() + "/service-account.json", "utf8"));
@@ -49,7 +48,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
         fbAdmin.initializeApp({
             credential: fbAdmin.credential.cert(serviceAccountKey),
             databaseURL: "https://" + project + ".firebaseio.com",
-            storageBucket: project + ".appspot.com"
+            storageBucket: project + ".appspot.com",
         });
         return fbAdmin.firestore();
     }
@@ -152,7 +151,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                         if (!(value &&
                             value.constructor &&
                             value.constructor.name === "Timestamp")) return [3 /*break*/, 5];
-                        data[key] = "<@new Date('" + value.toDate() + "')@> as any";
+                        data[key] = "<@admin.firestore.Timestamp.fromDate(new Date('" + value.toDate() + "'))@> as any";
                         return [3 /*break*/, 10];
                     case 5:
                         if (!(value &&

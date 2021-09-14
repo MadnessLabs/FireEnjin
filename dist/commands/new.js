@@ -47,7 +47,7 @@ var child_process_1 = require("child_process");
 var runCommand = function (command, options) {
     if (options === void 0) { options = null; }
     return new Promise(function (resolve, reject) {
-        child_process_1.exec(command, options, function (err, stdout) {
+        (0, child_process_1.exec)(command, options, function (err, stdout) {
             if (err)
                 reject(err);
             resolve(stdout);

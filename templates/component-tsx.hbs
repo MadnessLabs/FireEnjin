@@ -4,7 +4,7 @@ import { Build, Component, h } from "@stencil/core";
   tag: "{{namespace}}{{dashCase name}}",
   styleUrl: "{{dashCase name}}.css"
 })
-export class {{pascalCase name}} {
+export class {{nameFromPathPascal name}} {
 
   componentDidLoad() {
     if (Build.isBrowser) {

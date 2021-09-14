@@ -35,10 +35,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var globby = require("globby");
@@ -52,8 +56,8 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                 entries = _a.sent();
                 if (!(entries === null || entries === void 0 ? void 0 : entries.length))
                     throw new Error("No presets found...");
-                command = "tsc " + __spreadArray([__dirname + '/presetsDefine.js'], entries).join(" ") + " --out " + (process.argv[3] && process.argv[3] !== "watch" ? process.argv[3] : "www/presets.js") + " --module amd " + (process.argv[3] === 'watch' || process.argv[4] === 'watch' ? '--watch' : "") + " --moduleResolution node --allowJs";
-                child_process_1.exec(command, function (error, stdout, stderr) {
+                command = "tsc " + __spreadArray([__dirname + '/presetsDefine.js'], entries, true).join(" ") + " --out " + (process.argv[3] && process.argv[3] !== "watch" ? process.argv[3] : "www/presets.js") + " --module amd " + (process.argv[3] === 'watch' || process.argv[4] === 'watch' ? '--watch' : "") + " --moduleResolution node --allowJs";
+                (0, child_process_1.exec)(command, function (error, stdout, stderr) {
                     return __awaiter(this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             if (error !== null) {

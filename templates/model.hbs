@@ -13,36 +13,36 @@ import Model from "./Model";
 
 @Collection("{{plural name}}")
 @ObjectType({
-  description: "The information for a {{pascalCase name}} document"
+  description: "The information for a {{nameFromPathPascal name}} document"
 })
-export class {{pascalCase name}} {
+export class {{nameFromPathPascal name}} {
   @Field(() => ID)
   id: string;
   @Field({
-    description: "The name of the {{pascalCase name}}"
+    description: "The name of the {{nameFromPathPascal name}}"
   })
   name?: string;
 }
 
-@InputType({ description: "Editable {{pascalCase name}} data" })
-export class {{pascalCase name}}Input implements Partial<{{pascalCase name}}> {
+@InputType({ description: "Editable {{nameFromPathPascal name}} data" })
+export class {{nameFromPathPascal name}}Input implements Partial<{{nameFromPathPascal name}}> {
   @Field()
   name: string;
 }
 
-export class {{pascalCase name}}Model extends Model<{{pascalCase name}}> {
+export class {{nameFromPathPascal name}}Model extends Model<{{nameFromPathPascal name}}> {
   constructor() {
     super({
-      docSchema: {{pascalCase name}},
-      inputType: {{pascalCase name}}Input
+      docSchema: {{nameFromPathPascal name}},
+      inputType: {{nameFromPathPascal name}}Input
     });
   }
 }
 
-@Resolver(of => {{pascalCase name}})
-export class {{pascalCase name}}Resolver extends new {{pascalCase name}}Model().Resolver {
+@Resolver(of => {{nameFromPathPascal name}})
+export class {{nameFromPathPascal name}}Resolver extends new {{nameFromPathPascal name}}Model().Resolver {
 //   @FieldResolver()
-//   user(@Root() data: {{pascalCase name}}): Promise<User> {
+//   user(@Root() data: {{nameFromPathPascal name}}): Promise<User> {
 //     return new UserModel().find(data.user.id);
 //   }
 }

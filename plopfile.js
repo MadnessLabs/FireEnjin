@@ -15,6 +15,10 @@ function camelize(text) {
   );
 }
 
+function dashize(string) {
+  return string.replace(/\s+/g, "-").toLowerCase();
+}
+
 function pascalize(string) {
   return `${string}`
     .replace(new RegExp(/[-_]+/, "g"), " ")
@@ -62,6 +66,17 @@ module.exports = function (plop) {
     ? process.env.enjinProjectDir
     : process.cwd();
   plop.setHelper("plural", (txt) => pluralize(txt));
+  plop.setHelper("pathFromName", (txt) => {
+    const parts = txt.split("/");
+    parts.pop();
+
+    return parts.join("/");
+  });
+  plop.setHelper("nameFromPathCamel", (txt) => camelize(txt.split("/").pop()));
+  plop.setHelper("nameFromPathPascal", (txt) =>
+    pascalize(txt.split("/").pop())
+  );
+  plop.setHelper("nameFromPathDash", (txt) => dashize(txt.split("/").pop()));
   plop.setHelper("pluralCamel", (txt) => camelize(pluralize(txt)));
   plop.setHelper("pluralPascal", (txt) => pascalize(pluralize(txt)));
   plop.setGenerator("input", {
@@ -81,7 +96,7 @@ module.exports = function (plop) {
     actions: [
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/inputs/{{camelCase name}}.ts`,
+        path: `${process.env.enjinProjectDir}/src/inputs/{{nameFromPathCamel name}}.ts`,
         templateFile: `${__dirname}/templates/input.hbs`,
       },
     ],
@@ -104,37 +119,37 @@ module.exports = function (plop) {
     actions: [
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/units/{{camelCase name}}/{{camelCase name}}.input.ts`,
+        path: `${process.env.enjinProjectDir}/src/units/{{pathFromName name}}/{{nameFromPathCamel name}}/{{nameFromPathCamel name}}.input.ts`,
         templateFile: `${__dirname}/templates/input.hbs`,
       },
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/units/{{camelCase name}}/{{camelCase name}}.output.ts`,
+        path: `${process.env.enjinProjectDir}/src/units/{{pathFromName name}}/{{nameFromPathCamel name}}/{{nameFromPathCamel name}}.output.ts`,
         templateFile: `${__dirname}/templates/output.hbs`,
       },
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/units/{{camelCase name}}/{{camelCase name}}.test.ts`,
+        path: `${process.env.enjinProjectDir}/src/units/{{pathFromName name}}/{{nameFromPathCamel name}}/{{nameFromPathCamel name}}.test.ts`,
         templateFile: `${__dirname}/templates/endpoint-unit-test.hbs`,
       },
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/units/{{camelCase name}}/{{camelCase name}}.ts`,
+        path: `${process.env.enjinProjectDir}/src/units/{{pathFromName name}}/{{nameFromPathCamel name}}/{{nameFromPathCamel name}}.ts`,
         templateFile: `${__dirname}/templates/endpoint-unit.hbs`,
       },
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/resolvers/{{pascalCase name}}.ts`,
+        path: `${process.env.enjinProjectDir}/src/resolvers/{{nameFromPathPascal name}}.ts`,
         templateFile: `${__dirname}/templates/resolver.hbs`,
       },
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/triggers/{{camelCase name}}.ts`,
+        path: `${process.env.enjinProjectDir}/src/triggers/{{nameFromPathCamel name}}.ts`,
         templateFile: `${__dirname}/templates/trigger-https.hbs`,
       },
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/queries/{{camelCase name}}.gql`,
+        path: `${process.env.enjinProjectDir}/src/queries/{{nameFromPathCamel name}}.gql`,
         templateFile: `${__dirname}/templates/query-write.hbs`,
       },
     ],
@@ -156,7 +171,7 @@ module.exports = function (plop) {
     actions: [
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/resolvers/{{pascalCase name}}.ts`,
+        path: `${process.env.enjinProjectDir}/src/resolvers/{{nameFromPathPascal name}}.ts`,
         templateFile: `${__dirname}/templates/resolver.hbs`,
       },
     ],
@@ -178,7 +193,7 @@ module.exports = function (plop) {
     actions: [
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/triggers/{{camelCase name}}.ts`,
+        path: `${process.env.enjinProjectDir}/src/triggers/{{nameFromPathCamel name}}.ts`,
         templateFile: `${__dirname}/templates/trigger-https.hbs`,
       },
     ],
@@ -198,7 +213,7 @@ module.exports = function (plop) {
         type: "add",
         path: `${
           process.env.enjinProjectDir
-        }/src/migrations/${dateStringToYMD()}_{{camelCase name}}.ts`,
+        }/src/migrations/${dateStringToYMD()}_{{nameFromPathCamel name}}.ts`,
         templateFile: `${__dirname}/templates/migration.hbs`,
       },
     ],
@@ -288,7 +303,7 @@ module.exports = function (plop) {
       let actions = [
         {
           type: "add",
-          path: `${process.env.enjinProjectDir}/src/models/{{pascalCase name}}.ts`,
+          path: `${process.env.enjinProjectDir}/src/models/{{nameFromPathPascal name}}.ts`,
           templateFile: `${__dirname}/templates/model.hbs`,
         },
       ];
@@ -298,27 +313,27 @@ module.exports = function (plop) {
           ...actions,
           {
             type: "add",
-            path: `${process.env.enjinProjectDir}/src/queries/add{{pascalCase name}}.gql`,
+            path: `${process.env.enjinProjectDir}/src/queries/add{{nameFromPathPascal name}}.gql`,
             templateFile: `${__dirname}/templates/query-add.hbs`,
           },
           {
             type: "add",
-            path: `${process.env.enjinProjectDir}/src/queries/edit{{pascalCase name}}.gql`,
+            path: `${process.env.enjinProjectDir}/src/queries/edit{{nameFromPathPascal name}}.gql`,
             templateFile: `${__dirname}/templates/query-edit.hbs`,
           },
           {
             type: "add",
-            path: `${process.env.enjinProjectDir}/src/queries/delete{{pascalCase name}}.gql`,
+            path: `${process.env.enjinProjectDir}/src/queries/delete{{nameFromPathPascal name}}.gql`,
             templateFile: `${__dirname}/templates/query-delete.hbs`,
           },
           {
             type: "add",
-            path: `${process.env.enjinProjectDir}/src/queries/find{{pascalCase name}}.gql`,
+            path: `${process.env.enjinProjectDir}/src/queries/find{{nameFromPathPascal name}}.gql`,
             templateFile: `${__dirname}/templates/query-find.hbs`,
           },
           {
             type: "add",
-            path: `${process.env.enjinProjectDir}/src/queries/list{{pascalCase name}}.gql`,
+            path: `${process.env.enjinProjectDir}/src/queries/list{{nameFromPathPascal name}}.gql`,
             templateFile: `${__dirname}/templates/query-list.hbs`,
           },
         ];
@@ -339,27 +354,27 @@ module.exports = function (plop) {
     actions: (data) => [
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/queries/add{{pascalCase name}}.gql`,
+        path: `${process.env.enjinProjectDir}/src/queries/add{{nameFromPathPascal name}}.gql`,
         templateFile: `${__dirname}/templates/query-add.hbs`,
       },
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/queries/edit{{pascalCase name}}.gql`,
+        path: `${process.env.enjinProjectDir}/src/queries/edit{{nameFromPathPascal name}}.gql`,
         templateFile: `${__dirname}/templates/query-edit.hbs`,
       },
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/queries/delete{{pascalCase name}}.gql`,
+        path: `${process.env.enjinProjectDir}/src/queries/delete{{nameFromPathPascal name}}.gql`,
         templateFile: `${__dirname}/templates/query-delete.hbs`,
       },
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/queries/find{{pascalCase name}}.gql`,
+        path: `${process.env.enjinProjectDir}/src/queries/find{{nameFromPathPascal name}}.gql`,
         templateFile: `${__dirname}/templates/query-find.hbs`,
       },
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/queries/list{{pascalCase name}}.gql`,
+        path: `${process.env.enjinProjectDir}/src/queries/list{{nameFromPathPascal name}}.gql`,
         templateFile: `${__dirname}/templates/query-list.hbs`,
       },
     ],
@@ -383,7 +398,7 @@ module.exports = function (plop) {
     actions: (data) => [
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/queries/{{camelCase name}}.gql`,
+        path: `${process.env.enjinProjectDir}/src/queries/{{nameFromPathCamel name}}.gql`,
         templateFile: `${__dirname}/templates/query-${data.type}.hbs`,
       },
     ],
@@ -405,7 +420,7 @@ module.exports = function (plop) {
     actions: [
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/units/{{camelCase name}}/{{camelCase name}}.ts`,
+        path: `${process.env.enjinProjectDir}/src/units/{{pathFromName name}}/{{nameFromPathCamel name}}/{{nameFromPathCamel name}}.ts`,
         templateFile: `${__dirname}/templates/unit.hbs`,
         data: {
           simple: true,
@@ -413,7 +428,7 @@ module.exports = function (plop) {
       },
       {
         type: "add",
-        path: `${process.env.enjinProjectDir}/src/units/{{camelCase name}}/{{camelCase name}}.test.ts`,
+        path: `${process.env.enjinProjectDir}/src/units/{{pathFromName name}}/{{nameFromPathCamel name}}/{{nameFromPathCamel name}}.test.ts`,
         templateFile: `${__dirname}/templates/unit-test.hbs`,
         data: {
           simple: true,
