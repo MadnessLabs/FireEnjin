@@ -179,7 +179,7 @@ module.exports = function (plop) {
       {
         type: "add",
         path: `${process.env.enjinProjectDir}/src/triggers/{{camelCase name}}.ts`,
-        templateFile: `${__dirname}/templates/trigger.hbs`,
+        templateFile: `${__dirname}/templates/trigger-https.hbs`,
       },
     ],
   });
