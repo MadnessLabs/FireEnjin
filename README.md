@@ -1,6 +1,16 @@
-# FireEnjin by Madness Labs
+# FireEnjin ⚠️DEPRECATED⚠️
 
 This is a set of build process tasks aimed to make working with full-stack Firebase projects easier by the good people at Madness Labs.
+
+## This project has a new home
+
+https://github.com/fireenjin/cli
+
+---
+
+
+## Below is for documentation purposes only
+
 
 # Getting Started
 
